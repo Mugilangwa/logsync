@@ -10,14 +10,14 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 252, 242),
+     backgroundColor: const Color.fromARGB(255, 227, 185, 235),
       body: Column(
         children: [
           Expanded(
               flex: 3,
               child: Container(
                 decoration: const BoxDecoration(
-                    color: Color.fromARGB(221, 30, 236, 30),
+                    color:Colors.purple,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30))),
@@ -81,7 +81,7 @@ class Login extends StatelessWidget {
                           decoration: InputDecoration(
                             labelText: 'Password',
                             filled: true,
-                            fillColor: const Color.fromARGB(255, 224, 222, 212),
+                            fillColor: Colors.grey[200],
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(30),
                               borderSide: BorderSide.none,

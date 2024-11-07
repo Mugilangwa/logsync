@@ -9,6 +9,7 @@ class Current extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
       body: Padding(
         padding: const EdgeInsets.symmetric(
           horizontal: 16,vertical: 8),

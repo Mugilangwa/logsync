@@ -98,13 +98,18 @@ flutter:
     - assets/icon/facebook.png
     - assets/icon/3d-unlocked.png
     - assets/icon/user.png
-    - assets/truck/12.png
-    - assets/truck/1.png
-    - assets/truck/2.png
-    - assets/truck/11.png
-    - assets/truck/3.png
-    - assets/truck/21.png
     - assets/icon/home.png
     - assets/icon/cash-on-delivery.png
     - assets/icon/invoice.png
-    - assets/icon/form.png
+    - assets/truck/fast-delivery.png
+    - assets/truck/container.png
+    - assets/truck/bajaji.png
+    - assets/truck/tuktuk.png
+    - assets/truck/van.png
+    - assets/truck/pickup-truck.png
+    - assets/truck/truck.png
+    - assets/truck/box-truck.png
+    - assets/truck/transport.png
+    - assets/icons/email.png
+    - assets/icons/location.png
+    - assets/icons/phone.png

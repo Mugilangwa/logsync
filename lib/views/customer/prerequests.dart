@@ -25,6 +25,8 @@ class PreRequest extends StatelessWidget {
         ),
         floatingActionButton: FloatingActionButton(
           heroTag: 'uniqueTag2', // Ensure this tag is unique
+          
+          hoverColor: Colors.purple,
           onPressed: () {
             Navigator.push(
               context,
@@ -45,18 +47,39 @@ class NoScrollbarBehavior extends ScrollBehavior {
     return child; // Return the child without a scrollbar
   }
 }
+ 
+ class CarType{
+  final String image;
+  final String label;
 
+  CarType({required this.image, required this.label});
+ }
 
 class CollapsibleForm extends StatefulWidget {
   const CollapsibleForm({super.key});
 
   @override
+  // ignore: library_private_types_in_public_api
   _CollapsibleFormState createState() => _CollapsibleFormState();
 }
 
 class _CollapsibleFormState extends State<CollapsibleForm> {
   List<bool> isExpandedList = List.filled(3, false); // Assuming there are 3 sections
 
+int selectedcar = -1;
+// list of cartypes
+final List<CarType> cartypes = [
+  CarType(image:'assets/truck/fast-delivery.png', label: 'moto ride'),
+  CarType(image:'assets/truck/bajaji.png', label: 'Tuk-tuk'),
+  CarType(image:'assets/truck/tuktuk.png', label: 'Bajaji'),
+  CarType(image:'assets/truck/van.png', label: 'Van'),
+  CarType(image:'assets/truck/pickup-truck.png', label: 'Pick-Up'),
+  CarType(image:'assets/truck/truck.png', label: 'Truck'),
+  CarType(image:'assets/truck/box-truck.png', label: 'Box truck'),
+  CarType(image:'assets/truck/transport.png', label: 'FlatBed '),
+  CarType(image:'assets/truck/container.png', label: 'Container'),
+  
+];
   @override
   Widget build(BuildContext context) {
     return 
@@ -121,7 +144,7 @@ class _CollapsibleFormState extends State<CollapsibleForm> {
                   }),
               
                   // Additional button or actions below the expandable sections
-                  SizedBox(height: 20),
+                  const SizedBox(height: 20),
                    Center (
                                  child:  Row(
                                         children: [
@@ -212,7 +235,7 @@ class _CollapsibleFormState extends State<CollapsibleForm> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
@@ -252,7 +275,7 @@ class _CollapsibleFormState extends State<CollapsibleForm> {
                 ),
               ),
             ),
-            SizedBox(height: 8),
+            const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
@@ -274,18 +297,54 @@ class _CollapsibleFormState extends State<CollapsibleForm> {
         );
 
       case 2:
-        return Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
-          child: Row(
-            children: [
-              Icon(Icons.car_rental, color: Colors.purple, size: 40),
-              SizedBox(width: 12),
-              Text(
-                '',
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        // ignore: avoid_unnecessary_containers
+        return Container(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 4),
+             child:  SizedBox(
+              height: 400,
+               child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 2,
+                  mainAxisSpacing: 8,
+                  crossAxisSpacing: 8,
+                  childAspectRatio: 1.0),
+               itemCount: cartypes.length,
+               itemBuilder:(context,index) {
+                  return ElevatedButton(
+                    onPressed:(){
+                      setState(() {
+                        selectedcar=index;
+                      });
+                    },
+                    style: ElevatedButton.styleFrom(
+                       backgroundColor: selectedcar == index ? Colors.purple :Colors.white,
+                       foregroundColor: selectedcar == index ? Colors.white : Colors.purple,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(30)
+                      )
+                    ),
+                     child:Column(
+                           mainAxisAlignment: MainAxisAlignment.center,
+                           children: [
+                               Image.asset(
+                                cartypes[index].image,
+                                height: 100,
+                                width: 100,
+                               ),
+                               Text(
+                                cartypes[index].label,
+                                style: const TextStyle(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.bold
+                                ),
+                               )
+                                   ],
+                     )
+                    );
+               }),
+             ),
               ),
-            ],
-          ),
         );
 
       default:

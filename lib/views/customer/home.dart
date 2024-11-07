@@ -22,7 +22,7 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor:const Color.fromARGB(82, 232, 179, 243),
+      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Row(
@@ -38,11 +38,24 @@ class HomeState extends State<Home> {
                 SizedBox(
                   width: 10,
                 ),
-                Text(
-                  'Welcome, User',
-                  style: TextStyle(
-                    fontSize: 14,
-                  ),
+                Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome, User',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.bold
+                      ),
+                    ),
+                    Text(
+                      'Location,Bunju Beach',
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontStyle:FontStyle.italic
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -61,11 +74,11 @@ class HomeState extends State<Home> {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distributes space equally
           children: <Widget>[
-            _buildNavItem('assets/icon/home.png', "Home", 0),
-            _buildNavItem('assets/icon/form.png', "Request", 1),
+            _buildNavItem(Icons.home , "Home", 0),
+            _buildNavItem(Icons.request_page_sharp, "Request", 1),
             const Spacer(), // Spacer between the left and right sections
-            _buildNavItem('assets/icon/cash-on-delivery.png', "Payment", 2),
-            _buildNavItem('assets/icon/invoice.png', "Invoice", 3),
+            _buildNavItem(Icons.payment_sharp, "Payment", 2),
+            _buildNavItem(Icons.description, "Invoice", 3),
           ],
         ),
       ),
@@ -96,7 +109,7 @@ class HomeState extends State<Home> {
     );
   }
 
-  Widget _buildNavItem(String iconpath, String label, int index) {
+  Widget _buildNavItem(IconData icon, String label, int index) {
     return GestureDetector(
       onTap: () {
         _onItemTapped(index);
@@ -109,14 +122,11 @@ class HomeState extends State<Home> {
             child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              SizedBox(
-                width: 60,
-               height: 20,
-                child: Column(
+             Column(
                   children: [
-                    Image.asset(
-                      iconpath,
-                    //  color: _selectedIndex == index ? Colors.purple: Colors.black,
+                   Icon(
+                   icon,
+                   color: _selectedIndex == index ? Colors.purple: Colors.black,
                       
                     ),
                      const SizedBox(height: 4), // Vertical spacing between icon and text
@@ -130,7 +140,7 @@ class HomeState extends State<Home> {
                   ],
                 )
                
-              ),
+             
              
             ],
           ),
