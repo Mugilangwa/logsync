@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class Homepage extends StatelessWidget {
@@ -11,11 +13,12 @@ class Homepage extends StatelessWidget {
         padding: const EdgeInsets.all(8.0),
         child: Column(
           children: [
-            Center(
-              child: Padding(
+           
+               Padding(
                 padding: const EdgeInsets.all(16),
                 child: Container(
                   height: 150,
+                 
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
                     color: Colors.purple,
@@ -31,6 +34,7 @@ class Homepage extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         SearchBar(
+                          
                           hintText: 'Search with your Request Id',
                           leading: Icon(Icons.search),
                           backgroundColor: WidgetStatePropertyAll(Colors.white), // Set SearchBar background to pure white
@@ -40,7 +44,7 @@ class Homepage extends StatelessWidget {
                   ),
                 ),
               ),
-            ),
+            
         
         //list nanigation bar
              Row(

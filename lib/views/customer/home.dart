@@ -47,7 +47,7 @@ class HomeState extends State<Home> {
                         fontSize: 17,
                         fontWeight: FontWeight.bold
                       ),
-                    ),
+                     ),
                     Text(
                       'Location,Bunju Beach',
                       style: TextStyle(
@@ -87,10 +87,12 @@ class HomeState extends State<Home> {
       floatingActionButton: FloatingActionButton(
         heroTag:'uniqueTag1' ,
         onPressed: () {
-          // print("Central button pressed");
+           Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const CollapsibleForm ()));
         }, // Use central icon
         backgroundColor: Colors.purple,
-        child: const Icon(Icons.map),
+        child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
 
