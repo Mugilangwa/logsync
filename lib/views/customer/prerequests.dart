@@ -263,8 +263,8 @@ final List<CarType> cartypes = [
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
                 decoration: InputDecoration(
-                  labelText: 'Cargo Type',
-                  hintText: 'Enter cargo type',
+                  labelText: 'Reference Number',
+                  hintText: 'Enter Reference Number of a cargo',
                   filled: true,
                   fillColor: Colors.white,
                   border: OutlineInputBorder(

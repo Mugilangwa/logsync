@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logisync_mobile/views/account/driverRegistration.dart';
 import 'package:logisync_mobile/views/account/login.dart';
-import 'package:logisync_mobile/views/account/register.dart';
+import 'package:logisync_mobile/views/account/customerregistration.dart';
 import 'package:logisync_mobile/views/customer/home.dart';
 import 'package:logisync_mobile/views/account/welcome.dart';
 void main() {
@@ -42,9 +43,9 @@ class MyApp extends StatelessWidget {
               },
            ),
            GoRoute(
-            path: '/account/register',
+            path: '/account/customerregistration',
             builder: (context, state){
-              return Register();
+              return CustomerRegistation();
             },
            
            ),
@@ -52,7 +53,14 @@ class MyApp extends StatelessWidget {
             path:'/customer/home',
             builder: (context, state) {
               return const Home();
-            })
+            }
+            ),
+            GoRoute(
+            path:'/account/driverregistration',
+            builder: (context, state) {
+              return DriverRegistration();
+            }
+            )
             // GoRoute(
             //   path: '/driver/home',
             //   builder: (context,state){

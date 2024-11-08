@@ -3,10 +3,10 @@ import 'package:go_router/go_router.dart';
 import 'package:logisync_mobile/views/customer/current.dart';
 
 
-class Register extends StatelessWidget {
+class CustomerRegistation extends StatelessWidget {
   final _registerFormKey = GlobalKey<FormState>();
 
-  Register({super.key});
+  CustomerRegistation({super.key});
 
   @override
   Widget build(BuildContext context) {

@@ -200,10 +200,47 @@ class Login extends StatelessWidget {
                         ),
                         Center(
                           child: InkWell(
-                            onTap: () {
-                              context.go('/account/register');
-                            },
-                            child: const Text(
+                            
+                           onTap: () {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text(
+          'Hi Welcome, Please Tell Us You Want to Register as',
+          style: TextStyle(fontSize: 15),
+        ),
+        content: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+          context.go('/account/customerregistration');
+                        },
+              child: const Text(
+                'Customer',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+            ElevatedButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+                context.go('/account/driverregistration');
+               
+              },
+              child: const Text(
+                'Driver',
+                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+      );
+    },
+  );
+},
+ child: const Text(
                               "Don't Have Account? Register Here",
                               style: TextStyle(
                                 fontSize: 15,
