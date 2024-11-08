@@ -5,6 +5,7 @@ import 'package:logisync_mobile/views/customer/current.dart';
 class DriverRegistration extends StatefulWidget {
   const DriverRegistration({super.key});
   @override
+  // ignore: library_private_types_in_public_api
   _DriverregistrationState createState() => _DriverregistrationState();
 }
 

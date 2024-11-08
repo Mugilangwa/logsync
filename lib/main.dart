@@ -58,7 +58,7 @@ class MyApp extends StatelessWidget {
             GoRoute(
             path:'/account/driverregistration',
             builder: (context, state) {
-              return DriverRegistration();
+              return const DriverRegistration();
             }
             )
             // GoRoute(
