@@ -72,9 +72,8 @@ class _DriverHomeState extends State<DriverHome>{
 body: IndexedStack(
   index: _selectedIndex,
   children: <Widget>[
-    //  DriverHomePage(),
-     const Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
-     const Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
+   DriverHomePage(),
+          const Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
       const Center(child: Text('profile',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),)
   ],
 ),

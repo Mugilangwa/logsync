@@ -77,6 +77,7 @@ class DriverHomePage extends StatelessWidget {
                             mainAxisSize: MainAxisSize.min,
                             children: [
                               FloatingActionButton(
+                                heroTag: 'call',
                                 mini: true,
                                 onPressed: () {
                                 
@@ -125,6 +126,7 @@ class DriverHomePage extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               FloatingActionButton(
+                                heroTag:'info',
                                 mini: true,
                                 onPressed: () {
 
@@ -173,6 +175,7 @@ class DriverHomePage extends StatelessWidget {
                               ),
                               const SizedBox(width: 10),
                               FloatingActionButton(
+                               heroTag:'message',
                                 mini: true,
                                 onPressed: () {
 

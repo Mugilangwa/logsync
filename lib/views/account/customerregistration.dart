@@ -6,16 +6,16 @@ import 'package:logisync_mobile/views/customer/current.dart';
 // ignore: must_be_immutable
 
 class CustomerRegistation extends StatefulWidget{
-  CustomerRegistation({super.key});
+  const CustomerRegistation({super.key});
   
   @override
+  // ignore: library_private_types_in_public_api
   _CustomerRegistationState createState() => _CustomerRegistationState(); 
   
 }
 class _CustomerRegistationState extends State<CustomerRegistation> {
   final _registerFormKey = GlobalKey<FormState>();
-  final _banklist = TextEditingController();
-  final _fullName = TextEditingController();  
+   final _fullName = TextEditingController();  
   final _email = TextEditingController();
   final _bankaccountnumber = TextEditingController();
   final _bankaccountholder  = TextEditingController();
