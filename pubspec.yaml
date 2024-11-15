@@ -113,3 +113,10 @@ flutter:
     - assets/icons/email.png
     - assets/icons/location.png
     - assets/icons/phone.png
+    - assets/icon/driver.png
+    - assets/icon/logistic-company.png
+    - assets/icon/computer.png
+    - assets/icon/atm-card.png
+    - assets/icon/transference.png
+    - assets/icon/private-account.png
+    - assets/icon/sim-card.png

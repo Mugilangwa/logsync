@@ -29,26 +29,45 @@ class Current extends StatelessWidget {
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: 
                         [
-                        ElevatedButton(
-                         child: const Column(
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.all(8),
-                               child: Text('Request ID'),
-                              ),
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.end,
-                                children: [
-                                  Text('0 replies')
-                                ],
-                              )
-                          ],
-                          ),
-                            onPressed: (){
-                            Navigator.push(context,MaterialPageRoute(builder:(context) =>Replies()));
-                            }, 
-                            )
-                  
+                           
+                       ElevatedButton(
+  style: const ButtonStyle(
+  
+  ),
+  onPressed: () {
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => Replies()),
+    );
+  },
+  child: Column(
+    children: [
+      const Padding(
+        padding: EdgeInsets.all(8),
+        child: Text('Request ID'),
+      ),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            Image.asset(
+              'assets/icon/logistic-company.png',
+              width: 45,
+              height: 30,
+            ),
+            const SizedBox(width: 3),
+            const Text(
+              '0',
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    ],
+  ),
+)
+
                         ],
                         
                         ),

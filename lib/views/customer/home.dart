@@ -114,9 +114,7 @@ class HomeState extends State<Home> {
   Widget _buildNavItem(IconData icon, String label, int index) {
     return GestureDetector(
       onTap: () {
-        _onItemTapped(index);
-        
-      
+        _onItemTapped(index);            
       },
       
       child: Padding(
@@ -131,7 +129,7 @@ class HomeState extends State<Home> {
                    color: _selectedIndex == index ? Colors.purple: Colors.black,
                       
                     ),
-                     const SizedBox(height: 4), // Vertical spacing between icon and text
+                     const SizedBox(height:4), // Vertical spacing between icon and text
               Text(
                 label,
                 style: TextStyle(
@@ -141,10 +139,7 @@ class HomeState extends State<Home> {
               ),
                   ],
                 )
-               
-             
-             
-            ],
+             ],
           ),
         ),
       );

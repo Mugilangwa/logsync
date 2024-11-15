@@ -20,7 +20,15 @@ class _DriverregistrationState extends State<DriverRegistration> {
       backgroundColor: const Color.fromARGB(255, 227, 185, 235),
       body: Column(
         children: [
-          Expanded(flex: 2, child: Container()),
+          Expanded(flex: 2, child: Padding(
+             padding:const EdgeInsets.symmetric(horizontal: 1,vertical: 16),
+             child:Center(
+                  child: Image.asset('assets/icon/driver.png',
+                  )
+                  ),
+            )
+          ),
+          
           Expanded(
             flex: 8,
             child: ScrollConfiguration(
@@ -294,7 +302,7 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                 Center(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      context.go('/customer/home');
+                                      context.go('/driver/home');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
