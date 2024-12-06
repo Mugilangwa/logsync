@@ -8,7 +8,7 @@ class Homepage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-       backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+       backgroundColor:Colors.white,
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -34,7 +34,6 @@ class Homepage extends StatelessWidget {
                         ),
                         SizedBox(height: 10),
                         SearchBar(
-                          
                           hintText: 'Search with your Request Id',
                           leading: Icon(Icons.search),
                           backgroundColor: WidgetStatePropertyAll(Colors.white), // Set SearchBar background to pure white
@@ -46,7 +45,7 @@ class Homepage extends StatelessWidget {
               ),
             
         
-        //list nanigation bar
+        //list navigation bar
              Row(
                 children: [
 
@@ -55,9 +54,173 @@ class Homepage extends StatelessWidget {
                       height: 60,
                       child: TextButton.icon(
                         onPressed: (){
-                          
+                          showModalBottomSheet(
+                            context: context,
+                            isScrollControlled: true,
+                            backgroundColor: Colors.transparent,
+                             builder: (context) => 
+                              DraggableScrollableSheet(
+                                initialChildSize: 0.8,
+                                maxChildSize: 1,
+                                minChildSize: 0.6,
+                                builder:(context ,scrollController){
+                                  return Container(
+                                    decoration:const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.only(
+                                        topLeft: Radius.circular(10),
+                                        topRight: Radius.circular(10),
+                                      )
+                                    ),
+                                   child: ListView(
+                                    controller: scrollController,
+                                    children: [
+                                      ListTile(
+                                        title: const Text('Request Descriptions'),
+                                        trailing: const Icon(
+                                          Icons.close,
+                                           ),
+                                           onTap:() =>
+                                           (Navigator.pop(context)),
+                                           tileColor: Colors.purple,
+                                      ),
+                                       Center(
+                                         child: Padding(
+                                           padding: const EdgeInsets.all(30),
+                                           child: Container(
+                                            decoration:BoxDecoration(
+                                              color: const Color.fromARGB(239, 233, 218, 238),
+                                               borderRadius: BorderRadius.circular(25)
+                                              ),
+                                            
+                                             child: Padding(
+                                                padding: const EdgeInsets.all( 20),
+                                                child: Column(
+                                                  mainAxisAlignment: MainAxisAlignment.start,
+                                                  children: [
+                                                    //pickup location
+                                                    const Row(
+                                                        children: [
+                                                          Text('Pickup Location:',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('mnazi mmoja',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                    //dropup location 
+                                                    const Row(
+                                                        children: [
+                                                          Text('DropUp Location:',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('Tegeta',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                    //cargo description
+                                                    const Row(
+                                                        children: [
+                                                          Text('Cargo Description:',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                    // price 
+                                                    const Row(
+                                                        children: [
+                                                          Text('Price',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('',
+                                                          style: TextStyle(
+                                                            fontSize: 20,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 30,),
+                                                      ElevatedButton(
+                                                        onPressed:() {
+                                                          Navigator.push(context, MaterialPageRoute(builder:(context) => const TrackCorgo()));
+                                                        },
+                                                        style: ElevatedButton.styleFrom(
+                                                        backgroundColor: Colors.purple,
+                                                         shape: RoundedRectangleBorder(
+                                                          borderRadius: BorderRadius.circular(15),
+                                                          
+                                                         ),
+                                                       
+                                                        ), 
+                                                        
+                                                        child: const Text(
+                                                        'Live Tracking',
+                                                        style: TextStyle(
+                                                          color: Colors.white,
+                                                          fontWeight: FontWeight.bold,
+                                                          fontSize: 20,
+                                                          
+                                                        ),)
+                                                        
+                                                        )
+                                                  ],
+                                                ),
+                                                ),
+                                           ),
+                                         ),
+                                       )
+                                    ],
+                                   ),
+
+                                  );
+                                }
+                                 )
+                             
+                             );
                         }, 
-                        label: const Text('Track Order',
+                        label: const Text('Active Request',
                          style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold
@@ -71,8 +234,8 @@ class Homepage extends StatelessWidget {
                         ),
                     ),
                   ) ,  
-                   const  SizedBox(width: 10),
-                   Expanded(
+                   const  SizedBox(width: 9),
+                  Expanded(
                     child: SizedBox(height: 60,
                       child: TextButton.icon(
                         onPressed: (){

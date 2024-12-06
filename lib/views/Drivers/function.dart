@@ -81,10 +81,10 @@ void showCustomModal(BuildContext context) {
   Navigator.of(context).push(
     PageRouteBuilder(
       opaque: false, // Makes the background transparent
-      pageBuilder: (BuildContext context, _, __) => CustomModal(),
+      pageBuilder: (BuildContext context, _, __) => const CustomModal(),
       transitionsBuilder: (context, animation, _, child) {
         // Define the animation - change Offset for direction
-      //  const beginOffset = Offset(1.0, 0.0); // Right to left
+        //const beginOffset = Offset(1.0, 0.0); // Right to left
        const beginOffset = Offset(0.0, -1.0); // Top to bottom
 
         const endOffset = Offset.zero;

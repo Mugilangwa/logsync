@@ -25,8 +25,9 @@ class _DriverHomeState extends State<DriverHome>{
   Widget build(BuildContext context){
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+      backgroundColor:Colors.white,
       appBar:AppBar(
+        backgroundColor: Colors.white,
         leading: const CircleAvatar(),
         title: const Column(
           mainAxisAlignment: MainAxisAlignment.start,
@@ -34,6 +35,7 @@ class _DriverHomeState extends State<DriverHome>{
             Text(
               'Welcome, daniel ',
               style: TextStyle(
+                color: Colors.purple,
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
               ),
@@ -41,6 +43,7 @@ class _DriverHomeState extends State<DriverHome>{
              Text(
               'Location ',
               style: TextStyle(
+                 color: Colors.purple,
                 fontSize: 15,
                 fontStyle: FontStyle.italic,
               )
@@ -71,10 +74,11 @@ class _DriverHomeState extends State<DriverHome>{
 
 body: IndexedStack(
   index: _selectedIndex,
-  children: <Widget>[
-   DriverHomePage(),
-          const Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
-      const Center(child: Text('profile',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),)
+  children: const <Widget>[
+  DriverHomePage(),
+         // Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
+      Center(child: Text('profile',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
+       Center(child: Text('jobs',style: TextStyle(fontSize: 20,fontWeight: FontWeight.bold),),),
   ],
 ),
     );

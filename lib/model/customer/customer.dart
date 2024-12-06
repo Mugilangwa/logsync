@@ -1,4 +1,4 @@
-class Customer {
+class CustomerModal {
   final int? customerId ;
   final String fullname;
   final String email;
@@ -18,11 +18,11 @@ class Customer {
    final DateTime? dateCreated;
 
    
-  Customer({this.cardnumber, this.cardtype, this.billingaddress, this.expiredate, this.bankname, this.bankaccountnumber, this.bankaccountholder, this.mobilenetwok, this.mobilenumber,this.customerId, required this.fullname, required this.email,required this.phonenumber, required this.address, this.paymentinfo, required this.password, DateTime? dateCreated} )
+  CustomerModal({this.cardnumber, this.cardtype, this.billingaddress, this.expiredate, this.bankname, this.bankaccountnumber, this.bankaccountholder, this.mobilenetwok, this.mobilenumber,this.customerId, required this.fullname, required this.email,required this.phonenumber, required this.address, this.paymentinfo, required this.password, DateTime? dateCreated} )
             : dateCreated= dateCreated?? DateTime.now();
 
 
-factory Customer.fromJson(Map<String,dynamic> json) => Customer(
+factory CustomerModal.fromJson(Map<String,dynamic> json) => CustomerModal(
      customerId:json['customerId'] as int,
      fullname: json['fullname'] as String, 
      email: json['email'] as String,

@@ -39,13 +39,24 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+      backgroundColor:  Colors.white,
         body: 
         Column(
               children: [
                 Expanded(
                   flex: 2,
                   child:Container(
+                    child: const Center(
+                      child:  Text(
+                                  "Sign Up",
+                                  style: TextStyle(
+                                    fontSize: 30,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.purple,
+                                  ),
+                                ),
+                                
+                    ),
           
                   )
                   ),
@@ -58,7 +69,7 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                            child: Column(
                                           mainAxisAlignment: MainAxisAlignment.center,
                                           children: [
-                        const SizedBox(height: 30), // Space before the form
+                        const SizedBox(height:10), // Space before the form
                                       
                         // Form Container
                         Container(                  
@@ -75,16 +86,7 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                const Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    fontSize: 22,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.purple,
-                                  ),
-                                ),
-                                const SizedBox(height: 20),
-                               //fullname
+                                     //fullname
                                 TextFormField(
                                   controller: _fullName,
                                   decoration: InputDecoration(
@@ -207,7 +209,7 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                    },
                                    validator: (value){
                                    if (value == null || value.isEmpty) {
-                                    print('please select a choise');
+                                    return ('please select a choise');
                                      
                                    }
                                    return null;
@@ -282,15 +284,14 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                         items:<String>[
                                           'Visa',
                                           'Master Card',
-                                          
-                                        ].map((String value){
+                                           ].map((String value){
                                            return DropdownMenuItem(
                                             value: value,
                                             child: Text(value));
                                         }).toList(),
                                          onChanged:(String? value){
                                            setState(() {
-                                             value= _banknames;
+                                             value= _cardType;
                                            });
                                          },decoration: InputDecoration(
                                           labelText: 'Card Type',
@@ -336,7 +337,7 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                           prefixIcon: Padding(
                                           padding: const EdgeInsets.all(12.0),
                                           child: Image.asset(
-                                            'assets/icon/form.png', // Your icon image path
+                                            'assets/icon/atm-card.png', // Your icon image path
                                             height: 20,
                                             width: 20,
                                           )
@@ -402,10 +403,10 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                           'NBC',
                                           'ABSA',
                                           'BOA',
-                                        ].map((String value){
+                                        ].map((String values){
                                            return DropdownMenuItem(
-                                            value: value,
-                                            child: Text(value));
+                                            value: values,
+                                            child: Text(values));
                                         }).toList(),
                                          onChanged:(String? value){
                                            setState(() {

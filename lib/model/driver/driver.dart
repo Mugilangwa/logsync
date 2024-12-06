@@ -1,6 +1,6 @@
 // ignore_for_file: non_constant_identifier_names
 
-class Driver {
+class DriverModal {
   final int? driver_id ;
   final String fullname;
   final  String email;
@@ -14,11 +14,11 @@ class Driver {
   final String password;
   final DateTime dateCreated;
 
-  Driver( {this.driver_id, required this.fullname,required this.email,required this.phonenumber,required this.status, required this.lecenceclass, required this.lecencetype, required this.registration_comment, required this.is_available_for,required this.image_url,required this.password, DateTime?dateCreated})
+  DriverModal( {this.driver_id, required this.fullname,required this.email,required this.phonenumber,required this.status, required this.lecenceclass, required this.lecencetype, required this.registration_comment, required this.is_available_for,required this.image_url,required this.password, DateTime?dateCreated})
          : dateCreated = dateCreated ?? DateTime.now();
 
   
-  factory Driver.fromJson(Map<String,dynamic>json)=> Driver(
+  factory DriverModal.fromJson(Map<String,dynamic>json)=> DriverModal(
       driver_id: json['driver_id'] as int?,
       fullname: json['fullname'] as String,
       email: json['email'] as String,

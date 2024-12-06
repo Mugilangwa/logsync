@@ -5,82 +5,105 @@ import 'package:logisync_mobile/views/customer/replies.dart';
 class Current extends StatelessWidget {
   final requestFormKey = GlobalKey<FormState>();
 
-    Current({super.key});
+  Current({super.key});
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+      backgroundColor: Colors.white,
       body: Padding(
-        padding: const EdgeInsets.symmetric(
-          horizontal: 16,vertical: 8),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
         child: ScrollConfiguration(
-              behavior: NoScrollbarBehavior(),
-              child: SingleChildScrollView(
-                child: Center(
-                  child: Container(
-                   
-                    decoration: BoxDecoration(
-                            color:Colors.white,
-                            borderRadius: BorderRadius.circular(9),
-                          ),
-                    child: Padding(
-                      padding: const EdgeInsets.all(16.0),
+          behavior: NoScrollbarBehavior(),
+          child: SingleChildScrollView(
+              child: Center(
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(9),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+
+                    
+                    ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:  BorderRadius.circular(9)
+                        )
+                      ),
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => Replies()),
+                        );
+                      },
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: 
-                        [
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8),
+                            child: Text('Request ID'),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 0, vertical: 4),
+                            child: Row(
+
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                 const Text(
+                                      'in Process',
+                                      style: TextStyle(
+                                          fontSize: 20,
+                                          fontWeight: FontWeight.bold,
+                                          color: Colors.amber,
+                                          ),
+                                          
+                                    ),
+                                Row(
+                                  children: [
+                                    Image.asset(
+                                      'assets/icon/logistic-company.png',
+                                      width: 45,
+                                      height: 30,
+                                    ),
+                                    const Row(
+                                  children: [
+                                    Text(
+                                      '0',
+                                      style: TextStyle(
+                                          fontSize: 30,
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    Text(
+                                      'replies',
+                                      style: TextStyle(
+                                          fontSize: 12,
+                                          color: Colors.black45),
+                                    ),
+                                  ],
+                                ),
                            
-                       ElevatedButton(
-  style: const ButtonStyle(
-  
-  ),
-  onPressed: () {
-    Navigator.push(
-      context,
-      MaterialPageRoute(builder: (context) => Replies()),
-    );
-  },
-  child: Column(
-    children: [
-      const Padding(
-        padding: EdgeInsets.all(8),
-        child: Text('Request ID'),
-      ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 10),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.end,
-          children: [
-            Image.asset(
-              'assets/icon/logistic-company.png',
-              width: 45,
-              height: 30,
+                                  ],
+                                ),
+                                const SizedBox(width: 3),
+                                   ],
+                            ),
+                          ),
+                        
+                        ],
+                      ),
+                    )
+                  ],
+                ),
+              ),
             ),
-            const SizedBox(width: 3),
-            const Text(
-              '0',
-              style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-            ),
-          ],
+          )),
         ),
       ),
-    ],
-  ),
-)
-
-                        ],
-                        
-                        ),
-                      
-                    ),
-                  ),
-                )
-        
-            ),
-          ),
-      ),
-      );
-    
+    );
   }
 }
 
@@ -91,10 +114,3 @@ class NoScrollbarBehavior extends ScrollBehavior {
     return child; // Return the child without a scrollbar
   }
 }
-
-
-
-
-          
-
-

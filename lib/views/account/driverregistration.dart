@@ -12,23 +12,24 @@ class DriverRegistration extends StatefulWidget {
 class _DriverregistrationState extends State<DriverRegistration> {
   final _registerFormKey = GlobalKey<FormState>();
   String? _selectedValue;
-   String? _classtypeValue;
+  String? _classtypeValue;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+       backgroundColor:  Colors.white,
       body: Column(
         children: [
-          Expanded(flex: 2, child: Padding(
-             padding:const EdgeInsets.symmetric(horizontal: 1,vertical: 16),
-             child:Center(
-                  child: Image.asset('assets/icon/driver.png',
-                  )
-                  ),
-            )
-          ),
-          
+          Expanded(
+              flex: 2,
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 1, vertical: 16),
+                child: Center(
+                    child: Image.asset(
+                  'assets/icon/driver.png',
+                )),
+              )),
           Expanded(
             flex: 8,
             child: ScrollConfiguration(
@@ -81,7 +82,9 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                             'assets/icon/user.png', // Your icon image path
                                             height: 20,
                                             width: 20,
-                                          ))),
+                                          )
+                                          )
+                                          ),
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
@@ -302,7 +305,7 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                 Center(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      context.go('/driver/home');
+                                      context.go('/Drivers/home');
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(

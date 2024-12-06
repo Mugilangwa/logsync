@@ -6,6 +6,7 @@ import 'package:logisync_mobile/views/account/login.dart';
 import 'package:logisync_mobile/views/account/customerregistration.dart';
 import 'package:logisync_mobile/views/customer/home.dart';
 import 'package:logisync_mobile/views/account/welcome.dart';
+import 'package:logisync_mobile/views/customer/homepage.dart';
 void main() {
   runApp(const MyApp());
 }
@@ -46,16 +47,37 @@ class MyApp extends StatelessWidget {
            GoRoute(
             path: '/account/customerregistration',
             builder: (context, state){
-              return CustomerRegistation();
+              return const CustomerRegistation();
             },
            
            ),
+           //route for customers
            GoRoute(
             path:'/customer/home',
             builder: (context, state) {
               return const Home();
             }
             ),
+             GoRoute(
+            path:'/customer/request',
+            builder: (context, state) {
+              return const Homepage();
+            }
+            ),
+             GoRoute(
+            path:'/customer/payments',
+            builder: (context, state) {
+              return const Home();
+            }
+            ),
+             GoRoute(
+            path:'/customer/invoice',
+            builder: (context, state) {
+              return const Home();
+            }
+            ),
+
+            //route for drivers
             GoRoute(
             path:'/account/driverregistration',
             builder: (context, state) {
@@ -63,11 +85,17 @@ class MyApp extends StatelessWidget {
             }
             ),
             GoRoute(
-              path: '/driver/home',
+              path: '/Drivers/home',
               builder: (context,state){
-                return DriverHome();
+                return  const DriverHome();
               }
-           )
+           ),
+          //  GoRoute(
+          //     path: '/driver/job',
+          //     builder: (context,state){
+          //       return const DriverHome();
+          //     }
+          //  )
           ],
         ),
       ],

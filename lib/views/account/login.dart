@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+// import 'package:logisync_mobile/views/account/customerregistration.dart';
+// import 'package:logisync_mobile/views/account/driverregistration.dart';
 
 class Login extends StatelessWidget {
   final _loginFormKey = GlobalKey<FormState>();
@@ -10,20 +12,34 @@ class Login extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-     backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+     backgroundColor:Colors.white,
       body: Column(
         children: [
           Expanded(
-              flex: 3,
+              flex: 2,
               child: Container(
                 decoration: const BoxDecoration(
-                    color:Colors.purple,
+                    color:Colors.white,
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
-                        bottomRight: Radius.circular(30))),
-              )),
+                        bottomRight: Radius.circular(30)
+                        ),
+                        ),
+                      child: const Center(
+                        child: Text(
+                            "Sign Up",
+                            style: TextStyle(
+                              fontSize: 22,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.amber,
+                            ),
+                          ),
+                      ),
+              
+              )
+              ),
           Expanded(
-              flex: 7,
+              flex: 8,
               child: Center(
                   child: Container(
                 margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -33,14 +49,7 @@ class Login extends StatelessWidget {
                   child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          "Sign Up",
-                          style: TextStyle(
-                            fontSize: 22,
-                            fontWeight: FontWeight.bold,
-                            color: Colors.amber,
-                          ),
-                        ),
+                        
                         const SizedBox(height: 20),
                         //jina la mteja
                         TextFormField(
@@ -207,35 +216,32 @@ class Login extends StatelessWidget {
     builder: (BuildContext context) {
       return AlertDialog(
         title: const Text(
-          'Hi Welcome, Please Tell Us You Want to Register as',
+          'Registration ',
           style: TextStyle(fontSize: 15),
         ),
-        content: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-          context.go('/account/customerregistration');
-                        },
-              child: const Text(
-                'Customer',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                context.go('/account/driverregistration');
-               
-              },
-              child: const Text(
-                'Driver',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ],
-        ),
+        content: const Text('Please !tell us are you ,'),
+         actions: [
+          TextButton(
+            onPressed:() {
+              Navigator.of(context).pop();
+              context.go('/account/customerregistration');
+            //   Navigator.of(context).push(
+            //  MaterialPageRoute(builder: (context) =>const CustomerRegistation() ));
+            },
+             child: const Text('Customer'),
+          ),
+              TextButton(
+            onPressed:() {
+              Navigator.of(context).pop();
+
+             context.go('/account/driverregistration');
+            // Navigator.of(context).push(
+            //  MaterialPageRoute(builder: (context) =>const  DriverRegistration() ));
+            },
+             child: const Text('Driver')
+              )
+        ],
+     
       );
     },
   );

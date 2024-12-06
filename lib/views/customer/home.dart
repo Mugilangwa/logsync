@@ -22,7 +22,7 @@ class HomeState extends State<Home> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 227, 185, 235),
+      backgroundColor:Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Row(
@@ -75,10 +75,13 @@ class HomeState extends State<Home> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distributes space equally
           children: <Widget>[
             _buildNavItem(Icons.home , "Home", 0),
+             
             _buildNavItem(Icons.request_page_sharp, "Request", 1),
-            const Spacer(), // Spacer between the left and right sections
+           
             _buildNavItem(Icons.payment_sharp, "Payment", 2),
-            _buildNavItem(Icons.description, "Invoice", 3),
+          
+            _buildNavItem(Icons.person_2, "Account", 3),
+          
           ],
         ),
       ),
