@@ -40,7 +40,8 @@ class Current extends StatelessWidget {
                           MaterialPageRoute(builder: (context) => Replies()),
                         );
                       },
-                      child: Column(
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           const Padding(
                             padding: EdgeInsets.all(8),
@@ -49,34 +50,34 @@ class Current extends StatelessWidget {
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 horizontal: 0, vertical: 4),
-                            child: Row(
+                            child: Column(
 
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                 const Text(
-                                      'in Process',
-                                      style: TextStyle(
-                                          fontSize: 20,
+                                ButtonTheme(
+                                  child: const Text('status',
+                                   style: TextStyle(
+                                          fontSize: 15 ,
                                           fontWeight: FontWeight.bold,
                                           color: Colors.amber,
-                                          ),
-                                          
-                                    ),
+                                          ),)),
+                                const  SizedBox(height: 7,),
                                 Row(
                                   children: [
                                     Image.asset(
                                       'assets/icon/logistic-company.png',
-                                      width: 45,
-                                      height: 30,
+                                      width: 25,
+                                      height: 20,
                                     ),
                                     const Row(
                                   children: [
                                     Text(
                                       '0',
                                       style: TextStyle(
-                                          fontSize: 30,
+                                          fontSize: 15,
                                           fontWeight: FontWeight.bold),
                                     ),
+                                   
                                     Text(
                                       'replies',
                                       style: TextStyle(

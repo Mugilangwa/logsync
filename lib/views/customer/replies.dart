@@ -18,7 +18,8 @@ class _RepliesState extends State<Replies> {
   bool isvisible = false;
   bool isagree = false;
  
-  String customerprice=" ";
+  late final String? customerprice;
+  final double campanyprice = 50000;
   final TextEditingController _priceControler = TextEditingController();
 
   @override
@@ -42,6 +43,11 @@ class _RepliesState extends State<Replies> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     ElevatedButton(
+                       style: ElevatedButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                          borderRadius:  BorderRadius.circular(5)
+                        )
+                      ),
                       child: const Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -51,8 +57,9 @@ class _RepliesState extends State<Replies> {
                           ),
                           Column(
                             children: [
-                              Text('Price'),
-                              Text('45000'),
+                              
+                              Text( 'Tsh 45000 '
+                              ),
                             ],
                           )
                         ],
@@ -219,7 +226,7 @@ class _RepliesState extends State<Replies> {
                                                                           customerprice= proposedprice;
                                                                           ScaffoldMessenger.of(content).showSnackBar(
                                                                           SnackBar(
-                                                                            content:Text("Proposed Price: \$${proposedprice}")
+                                                                            content:Text("Proposed Price: \$$proposedprice")
                                                                             ) 
                                                                       );
                                                                         }
