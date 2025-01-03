@@ -58,7 +58,7 @@ class Current extends StatelessWidget {
                                   child: const Text('status',
                                    style: TextStyle(
                                           fontSize: 15 ,
-                                          fontWeight: FontWeight.bold,
+                                         
                                           color: Colors.amber,
                                           ),)),
                                 const  SizedBox(height: 7,),

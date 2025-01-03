@@ -206,7 +206,7 @@ final List<CarType> cartypes = [
       case 1:
         return 'Cargo Details';
       case 2:
-        return 'Select a Car';
+        return 'Means Of Transport';
       default:
         return 'Details';
     }

@@ -15,19 +15,20 @@ class CustomerRegistation extends StatefulWidget{
 }
 class _CustomerRegistationState extends State<CustomerRegistation> {
   final _registerFormKey = GlobalKey<FormState>();
-   final _fullName = TextEditingController();  
-  final _email = TextEditingController();
-  final _bankaccountnumber = TextEditingController();
-  final _bankaccountholder  = TextEditingController();
-  final _billingaddress = TextEditingController();
-  final _mobilenumber= TextEditingController();
-  final _address = TextEditingController();
-  final _phonenumber= TextEditingController();
-  final _cardnumber= TextEditingController();
-  final _expireDate= TextEditingController();
-  final _password= TextEditingController();
+   final TextEditingController  _fullName = TextEditingController();  
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController  _bankaccountnumber = TextEditingController();
+  final  TextEditingController _bankaccountholder  = TextEditingController();
+  final TextEditingController _billingaddress = TextEditingController();
+  final TextEditingController _mobilenumber= TextEditingController();
+  final TextEditingController _address = TextEditingController();
+  final TextEditingController _phonenumber= TextEditingController();
+  final TextEditingController  _cardnumber= TextEditingController();
+  final TextEditingController _expireDate= TextEditingController();
+  final TextEditingController _password= TextEditingController();
+  final TextEditingController _comfirmpassword= TextEditingController();
   
-  String? _selectedpayment;
+  String? _selectedpayment = "Cash";
   String? _banknames;
   String? _mobilelist;
   String? _cardType;
@@ -43,21 +44,18 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
         body: 
         Column(
               children: [
-                Expanded(
+                const Expanded(
                   flex: 2,
-                  child:Container(
-                    child: const Center(
-                      child:  Text(
-                                  "Sign Up",
-                                  style: TextStyle(
-                                    fontSize: 30,
-                                    fontWeight: FontWeight.bold,
-                                    color: Colors.purple,
-                                  ),
+                  child:Center(
+                    child:  Text(
+                                "Sign Up",
+                                style: TextStyle(
+                                  fontSize: 30,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.purple,
                                 ),
-                                
-                    ),
-          
+                              ),
+                              
                   )
                   ),
                   Expanded(
@@ -109,6 +107,13 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                     )
                                     )
                                   ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your fullname ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                  //email
@@ -134,6 +139,13 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                     )
                                     )
                                   ),
+                                   validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your email';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 //Phone Number
@@ -159,6 +171,13 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                     )
                                     )
                                   ),
+                                   validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your phonenumber ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                      //Address
@@ -184,6 +203,13 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                     )
                                     )
                                   ),
+                                   validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your address ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                     // paymentinfo
@@ -191,10 +217,11 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                   value: _selectedpayment,
                                   hint: const Text('Select '),
                                   items:<String>[
+                                    'Cash',
                                     'Credit Card',
                                     'Bank Transfer',
                                     'Mobile Netwoks',
-                                    'Cash'].
+                                    ].
                                     map((String value){
                                        return DropdownMenuItem <String>(
                                          value: value,
@@ -595,19 +622,9 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                    ),
                                  ),
                               
-                              ]
-                                  ,
-                                    if(_selectedpayment == 'Pesa Taslimu' )...[
-                                   const Padding(
-                                   padding: EdgeInsets.symmetric(
-                                    horizontal: 50 , vertical: 5),
-                                  child: Text(
-                                    'No any field is requied, '
-                                  ),
-                                   ),
-                              
-                              ]
-                                  ,
+                              ],
+                                  
+                                  
                                 
                                  TextFormField(
                                   controller: _password,
@@ -636,15 +653,56 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                                     if (value == null || value.isEmpty) {
                                       return 'Please Enter Your Password';
                                     }
+                                    if (value.length<8){
+                                      return 'The Password Must Contains atleast 8 characters';
+                                    }
                                     return null;
                                   },
                                 ),
+                                 const SizedBox(height: 15),
+                                TextFormField(
+                                  controller: _comfirmpassword,
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Confirm Password',
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                       borderSide: const BorderSide(color: Colors.purple),                                  
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                    suffixIcon: const Icon(Icons.visibility_off),
+                                    prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Image.asset(
+                                      'assets/icon/3d-unlocked.png', // Your icon image path
+                                      height: 20,
+                                      width: 20,
+                                    )
+                                    )
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Comfirm Your Password';
+                                    }
+                                    if(value != _password.text){
+                                      return "Passwords Doesn't Match";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                
                                 
                                 const SizedBox(height: 30),
                                 Center(
                                   child: ElevatedButton(
                                     onPressed: () {
-                                      context.go('/customer/home');
+                                      if(_registerFormKey.currentState!.validate()){
+                                         context.go('/customer/home');
+                                      }
+                                     
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(

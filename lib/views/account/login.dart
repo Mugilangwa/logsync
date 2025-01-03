@@ -19,7 +19,7 @@ class Login extends StatelessWidget {
               flex: 2,
               child: Container(
                 decoration: const BoxDecoration(
-                    color:Colors.white,
+                    color:Color.fromARGB(255, 121, 209, 20),
                     borderRadius: BorderRadius.only(
                         bottomLeft: Radius.circular(30),
                         bottomRight: Radius.circular(30)
@@ -119,7 +119,9 @@ class Login extends StatelessWidget {
                         Center(
                           child: ElevatedButton(
                             onPressed: () {
-                              context.go('/customer/home');
+                             if(_loginFormKey.currentState!.validate()){
+                               context.go('/customer/home');
+                             }
                             },
                             style: ElevatedButton.styleFrom(
                               padding: const EdgeInsets.symmetric(

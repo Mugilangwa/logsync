@@ -11,6 +11,18 @@ class DriverRegistration extends StatefulWidget {
 
 class _DriverregistrationState extends State<DriverRegistration> {
   final _registerFormKey = GlobalKey<FormState>();
+ 
+   
+   final TextEditingController  _fullName = TextEditingController();  
+  final TextEditingController _email = TextEditingController();
+  final TextEditingController  _lecencenumber = TextEditingController();
+  
+ 
+  final TextEditingController _phonenumber= TextEditingController();
+  
+  final TextEditingController _password= TextEditingController();
+  final TextEditingController _comfirmpassword= TextEditingController();
+  
   String? _selectedValue;
   String? _classtypeValue;
 
@@ -64,6 +76,7 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                 ),
                                 const SizedBox(height: 20),
                                 TextFormField(
+                                  controller: _fullName,
                                   decoration: InputDecoration(
                                       labelText: 'Full Name',
                                       filled: true,
@@ -85,9 +98,17 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                           )
                                           )
                                           ),
+                                           validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your full name ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _email,
                                   keyboardType: TextInputType.emailAddress,
                                   decoration: InputDecoration(
                                       labelText: 'Email',
@@ -98,7 +119,9 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                         borderSide: const BorderSide(
                                             color: Colors.purple),
                                       ),
+                                     
                                       contentPadding:
+
                                           const EdgeInsets.symmetric(
                                               vertical: 20, horizontal: 20),
                                       prefixIcon: Padding(
@@ -108,9 +131,17 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                             height: 20,
                                             width: 20,
                                           ))),
+                                validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your email ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _phonenumber,
                                   keyboardType: TextInputType.phone,
                                   decoration: InputDecoration(
                                       labelText: 'Phone Number',
@@ -130,30 +161,17 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                             'assets/icons/phone.png', // Your icon image path
                                             height: 20,
                                             width: 20,
-                                          ))),
-                                ),
-                                const SizedBox(height: 15),
-                                TextFormField(
-                                  keyboardType: TextInputType.text,
-                                  decoration: InputDecoration(
-                                      labelText: 'Status',
-                                      filled: true,
-                                      fillColor: Colors.grey[200],
-                                      border: OutlineInputBorder(
-                                        borderRadius: BorderRadius.circular(30),
-                                        borderSide: const BorderSide(
-                                            color: Colors.purple),
-                                      ),
-                                      contentPadding:
-                                          const EdgeInsets.symmetric(
-                                              vertical: 20, horizontal: 20),
-                                      prefixIcon: Padding(
-                                          padding: const EdgeInsets.all(12.0),
-                                          child: Image.asset(
-                                            'assets/icons/location.png', // Your icon image path
-                                            height: 20,
-                                            width: 20,
-                                          ))),
+                                          ),
+                                          
+                                          )
+                                          ),
+                                          validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Enter Your phonenumber ';
+                                    }
+                                    
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 DropdownButtonFormField<String>(
@@ -176,12 +194,12 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                   },
                                   validator: (value) {
                                     if (value == null || value.isEmpty) {
-                                      return 'Please select an option';
+                                      return 'Please select an martial status';
                                     }
                                     return null;
                                   },
                                   decoration: InputDecoration(
-                                      labelText: 'Choose Option',
+                                      labelText: 'Select..',
                                       filled: true,
                                       fillColor: Colors.grey[200],
                                       border: OutlineInputBorder(
@@ -245,10 +263,12 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                             'assets/icons/email.png', // Your icon image path
                                             height: 20,
                                             width: 20,
-                                          ))),
+                                          ))
+                                          ),
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _lecencenumber,
                                   keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                       labelText: 'Lecence Number',
@@ -268,10 +288,18 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                             'assets/icon/cash-on-delivery.png', // Your icon image path
                                             height: 20,
                                             width: 20,
-                                          ))),
+                                          ))
+                                          ),
+                                          validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your lecence number';
+                                    }
+                                    return null;
+                                  },
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _password,
                                   obscureText: true,
                                   decoration: InputDecoration(
                                       labelText: 'Password',
@@ -298,14 +326,55 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                     if (value == null || value.isEmpty) {
                                       return 'Please Enter Your Password';
                                     }
+                                    if(value.length < 8){
+                                      return 'Your password must contains atleast 7 characters!';
+                                    }
                                     return null;
                                   },
                                 ),
+                                 const SizedBox(height: 15),
+                                TextFormField(
+                                  controller: _comfirmpassword,
+                                  obscureText: true,
+                                  decoration: InputDecoration(
+                                    labelText: 'Confirm Password',
+                                    filled: true,
+                                    fillColor: Colors.grey[200],
+                                    border: OutlineInputBorder(
+                                      borderRadius: BorderRadius.circular(30),
+                                       borderSide: const BorderSide(color: Colors.purple),                                  
+                                    ),
+                                    contentPadding: const EdgeInsets.symmetric(
+                                        vertical: 20, horizontal: 20),
+                                    suffixIcon: const Icon(Icons.visibility_off),
+                                    prefixIcon: Padding(
+                                    padding: const EdgeInsets.all(12.0),
+                                    child: Image.asset(
+                                      'assets/icon/3d-unlocked.png', // Your icon image path
+                                      height: 20,
+                                      width: 20,
+                                    )
+                                    )
+                                  ),
+                                  validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please Comfirm Your Password';
+                                    }
+                                    if(value != _password.text){
+                                      return'Your password does not match';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                
                                 const SizedBox(height: 30),
                                 Center(
                                   child: ElevatedButton(
                                     onPressed: () {
+                                      if(_registerFormKey.currentState!.validate()){
                                       context.go('/Drivers/home');
+                                      }
+                                      
                                     },
                                     style: ElevatedButton.styleFrom(
                                       padding: const EdgeInsets.symmetric(
@@ -323,6 +392,7 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                               210, 247, 246, 240)),
                                     ),
                                   ),
+
                                 ),
                                 const SizedBox(height: 20),
                                 Center(

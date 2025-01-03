@@ -101,17 +101,17 @@ class Homepage extends StatelessWidget {
                                                     //pickup location
                                                     const Row(
                                                         children: [
-                                                          Text('Pickup Location:',
+                                                          Text('DriverName:',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 15,
                                                             fontWeight: FontWeight.w500,
                                                             color: Colors.black
                                                           )
                                                           ),
                                                           SizedBox(width: 5),
-                                                          Text('mnazi mmoja',
+                                                          Text('daniel hussein',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 16,
                                                             fontWeight: FontWeight.bold,
                                                             color: Colors.purple
                                                           )
@@ -119,20 +119,19 @@ class Homepage extends StatelessWidget {
                                                         ],
                                                       ) ,
                                                       const SizedBox(height: 20,),
-                                                    //dropup location 
-                                                    const Row(
+                                                        const Row(
                                                         children: [
-                                                          Text('DropUp Location:',
+                                                          Text('Vehicle:',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 15,
                                                             fontWeight: FontWeight.w500,
                                                             color: Colors.black
                                                           )
                                                           ),
                                                           SizedBox(width: 5),
-                                                          Text('Tegeta',
+                                                          Text('',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 16,
                                                             fontWeight: FontWeight.bold,
                                                             color: Colors.purple
                                                           )
@@ -140,12 +139,71 @@ class Homepage extends StatelessWidget {
                                                         ],
                                                       ) ,
                                                       const SizedBox(height: 20,),
-                                                    //cargo description
-                                                    const Row(
+                                                        const Row(
+                                                        children: [
+                                                          Text('Current Location:',
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                        const Row(
+                                                        children: [
+                                                          Text('Depacher Time:',
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                        const Row(
+                                                        children: [
+                                                          Text('Time of Arrival:',
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                            fontWeight: FontWeight.w500,
+                                                            color: Colors.black
+                                                          )
+                                                          ),
+                                                          SizedBox(width: 5),
+                                                          Text('',
+                                                          style: TextStyle(
+                                                            fontSize: 16,
+                                                            fontWeight: FontWeight.bold,
+                                                            color: Colors.purple
+                                                          )
+                                                          )
+                                                        ],
+                                                      ) ,
+                                                      const SizedBox(height: 20,),
+                                                        const Row(
                                                         children: [
                                                           Text('Cargo Description:',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 15,
                                                             fontWeight: FontWeight.w500,
                                                             color: Colors.black
                                                           )
@@ -153,7 +211,7 @@ class Homepage extends StatelessWidget {
                                                           SizedBox(width: 5),
                                                           Text('',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 16,
                                                             fontWeight: FontWeight.bold,
                                                             color: Colors.purple
                                                           )
@@ -161,12 +219,11 @@ class Homepage extends StatelessWidget {
                                                         ],
                                                       ) ,
                                                       const SizedBox(height: 20,),
-                                                    // price 
-                                                    const Row(
+                                                        const Row(
                                                         children: [
-                                                          Text('Price',
+                                                          Text('Price:',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 15,
                                                             fontWeight: FontWeight.w500,
                                                             color: Colors.black
                                                           )
@@ -174,15 +231,16 @@ class Homepage extends StatelessWidget {
                                                           SizedBox(width: 5),
                                                           Text('',
                                                           style: TextStyle(
-                                                            fontSize: 20,
+                                                            fontSize: 16,
                                                             fontWeight: FontWeight.bold,
                                                             color: Colors.purple
                                                           )
                                                           )
                                                         ],
                                                       ) ,
-                                                      const SizedBox(height: 30,),
-                                                      ElevatedButton(
+                                                      const SizedBox(height: 20,),
+                                                      
+                                                    ElevatedButton(
                                                         onPressed:() {
                                                           Navigator.push(context, MaterialPageRoute(builder:(context) => const TrackCorgo()));
                                                         },
