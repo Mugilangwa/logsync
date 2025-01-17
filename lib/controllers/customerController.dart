@@ -160,8 +160,33 @@ static Future<bool> isLoggedIn() async {
     return prefs.getBool('isLoggedIn') ?? false;
   }
 
+ 
+ List<Map<String,dynamic>> listOfJobsRequested = [];
+
+Future<List<Map<String,dynamic>>?> getCustomerJobRequest() async{
+  
+  final getCustomerJobRequestUrl =  Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$customerID');
+  
+  try {
+ final response = await http.get(
+      getCustomerJobRequestUrl,
+      headers: {'Content-Type':'application/json'},
+      );
+
+if (response.statusCode==200) {
+  
+final  Map<String,dynamic> data= jsonDecode(response.body);
 
 
+
+}
+ 
+
+  } catch (e) {
+    
+  }
+
+}
 
 
 }
