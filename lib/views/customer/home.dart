@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:logisync_mobile/controllers/customer/registerandlogin.dart';
 import 'package:logisync_mobile/controllers/customerController.dart';
+import 'package:logisync_mobile/shared/session_manager.dart';
 import 'package:logisync_mobile/views/customer/homepage.dart';
 import 'package:logisync_mobile/views/customer/prerequests.dart';
 import 'package:provider/provider.dart';
@@ -29,7 +31,16 @@ String? _userName ;
 @override
 void initState(){
   super.initState();
+  checkLoginStatus(context);
   _loadUserData();
+}
+
+//for checking if user is logged in or not
+void checkLoginStatus(BuildContext context) async {
+  final isLoggedIn= await SessionManager.isLoggedIn();
+  if (!isLoggedIn) {
+   GoRouter.of(context).go('/account/login');
+  }
 }
  
  Future<void> _loadUserData() async{

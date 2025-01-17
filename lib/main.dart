@@ -12,32 +12,57 @@ import 'package:logisync_mobile/views/account/customerregistration.dart';
 import 'package:logisync_mobile/views/customer/home.dart';
 import 'package:logisync_mobile/views/account/welcome.dart';
 import 'package:logisync_mobile/views/customer/homepage.dart';
-void main() {
+import 'package:shared_preferences/shared_preferences.dart';
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  final prefs = await SharedPreferences.getInstance();
+  final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+  final role = prefs.getString('role'); // Retrieve the user's role
+
+  String initialRoute;
+
+  // Determine the initial route based on login state and role
+  if (!isLoggedIn) {
+    initialRoute = '/account/login'; // Redirect to login if not logged in
+  } else if (role == 'CUSTOMER') {
+    initialRoute = '/customer/home'; // Redirect customer to their home
+  } else if (role == 'DRIVER') {
+    initialRoute = '/Drivers/home'; // Redirect driver to their home
+  } else {
+    initialRoute = '/'; // Fallback route
+  }
+
   runApp(
     MultiProvider(
-      providers:[
-      ChangeNotifierProvider(create: (context)=>ApiService()),
-      ChangeNotifierProvider(create: (context)=> LoginAndRegisterController()),
-      ChangeNotifierProvider(create: (context) => JobRequestProvider()),
-      ChangeNotifierProvider(create: (context) => CustomerController())
+      providers: [
+        ChangeNotifierProvider(create: (context) => ApiService()),
+        ChangeNotifierProvider(create: (context) => LoginAndRegisterController()),
+        ChangeNotifierProvider(create: (context) => JobRequestProvider()),
+        ChangeNotifierProvider(create: (context) => CustomerController()),
       ],
-      child:const MyApp()
-    )
-    
-     );
+      child: MyApp(initialRoute: initialRoute),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp({super.key, required String initialRoute});
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     final GoRouter router = GoRouter(
       initialLocation: '/',
-      
+      redirect: (context, state) async {
+    // Check the login state
+    final prefs = await SharedPreferences.getInstance();
+    final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
 
-      routes: [
+    // Redirect to login if the user is not logged in
+    if (!isLoggedIn ) {
+      return '/account/login';
+    };
+      }, routes: [
         ShellRoute(
           builder: (context, state, child) {
             return Scaffold(
@@ -114,7 +139,8 @@ class MyApp extends StatelessWidget {
           //  )
           ],
         ),
-      ],
+      ]
+      , 
     );
 
 

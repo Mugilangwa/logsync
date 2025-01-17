@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:go_router/go_router.dart';
 
-import 'package:logisync_mobile/controllers/customer/registerandlogin.dart';
+
 import 'package:logisync_mobile/controllers/customerController.dart';
 
 import 'package:provider/provider.dart';
@@ -119,29 +119,13 @@ class Login extends StatelessWidget {
                               child: ElevatedButton(
                                 onPressed: () async {
                                     if (_loginFormKey.currentState!.validate()) {
-                                      final result = await customerController.login(
+                                     customerController.login(
                                          _usernameController.text.trim(),
-                                        _passwordController.text.trim());
-
-                                                                       
-                                    if (result == "Login successful!") {
-                                          // ignore: use_build_context_synchronously
-                                          ScaffoldMessenger.of(context).showSnackBar(
-                                            SnackBar(content:Text(result))
-                                          );
-                                           context.go('/customer/home');
-                                         if(customerController.userType == 'CUSTOMER'){
-                                           // ignore: use_build_context_synchronously
-                                           context.go('/customer/home');
-                                           }
-                                           else if(customerController.userType == 'DRIVER'){
-                                            // ignore: use_build_context_synchronously
-                                            context.go(
-                                          "/driver/home");
+                                        _passwordController.text.trim(),context);
+                                                                  
                                       }
 
-                                    }
-                                  }
+                                    
                                 },
                                 style: ElevatedButton.styleFrom(
                                   padding: const EdgeInsets.symmetric(

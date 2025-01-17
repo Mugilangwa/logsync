@@ -1,14 +1,12 @@
 
 
 import 'dart:convert';
-
 import 'package:flutter/material.dart';
-
+import 'package:go_router/go_router.dart';
 import 'package:logisync_mobile/model/customer/request.dart';
 import 'package:http/http.dart' as http;
+import 'package:logisync_mobile/shared/session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/customer/customer.dart';
 import '../model/truck.dart';
 import '../services/api_services.dart';
 import '../shared/constants.dart';
@@ -16,8 +14,7 @@ import '../shared/constants.dart';
 class CustomerController extends ChangeNotifier{
 
 JobRequest? jobRequest;
-JobRequest? activeJobRequest;
- 
+JobRequest? activeJobRequest; 
 List<TruckType> avilableTruckTypes = [];
 String? selectedTruckTypeId;
 String? selectedTruckTypeName;
@@ -36,10 +33,10 @@ String? customerID;
 
  Future<void> fetchTruckTypes() async {
   try {
+
     // Fetch the truck data from the API service
     var response = await ApiService.getTruckData();
-    print(response);
-
+  
     // Ensure the response is not null and contains data
     if (response != null && response.isNotEmpty) {
       avilableTruckTypes = response.map((data) => TruckType.fromJson(data)).toList();
@@ -93,7 +90,7 @@ Future<String> createJobRequest(JobRequest jobRequestPayload) async{
     
 
 //method for login
-Future<String> login(String email, String password) async {
+Future<void> login(String email, String password, BuildContext context) async {
   final loginUrl = Uri.parse("$API_BASE_URL/SecUser/Login");
 
   try {
@@ -108,38 +105,64 @@ Future<String> login(String email, String password) async {
       }),
     );
 
-    if (response.statusCode == 200) {
-      final data = jsonDecode(response.body);
-
-      // Extract user details
-       customerUsename = data["data"]["email"];
-       userType= data["data"]["role"];
+if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        // Extract details from response
        customerID = data["data"]["userID"];
+       userType = data["data"]["role"];    
+       customerUsename = data["data"]["email"];
+              // Save data to shared preferences
+       await saveUserSession(customerUsename, data["data"]["userID"]);
 
-      // Save data to shared preferences
-      // await saveUserData(customerUsename, customerID);
-
-      
-     
- notifyListeners();
-      return 
-        'Login successful!';
-        
-      
-    } else {
+               // Navigate based on role
+        if (userType == "CUSTOMER") {
+         GoRouter.of(context).go('/customer/Home');
+        } else if (userType == "DRIVER") {
+         GoRouter.of(context).go('/driver/Home');
+        } 
+        ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("welcome again! $customerUsename"),duration: Duration(seconds: 4),),
+      );
+      notifyListeners();
+       
+    } 
+    else {
       final error = jsonDecode(response.body)['message'] ?? 'Unknown error';
-      return  error;
+      ScaffoldMessenger.of(error).showSnackBar(
+        SnackBar(content: Text("Error during login: $error"),duration: Duration(minutes: 1)),
+      );
     }
   } catch (e) {
-         return   'failed';
+          ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Error during login: $e"),duration: Duration(minutes: 1)),
+      );  
   }
 }
 
-Future<void> saveUserData(String username, String customerId) async {
+
+//method of save session
+
+static Future<void> saveUserSession(String username, String customerId) async {
   final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('username', username);
-  await prefs.setString('customerId', customerId);
+  prefs.setString('username', username);
+  prefs.setString('customerId', customerId);
+  prefs.setBool('isLoggedIn', true);
+
 }
+//method for clear usersession data
+static Future<void>clearSession() async {
+  final prefs =await SharedPreferences.getInstance();
+  prefs.clear();
+}
+
+static Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+
+
+
 
 }
 

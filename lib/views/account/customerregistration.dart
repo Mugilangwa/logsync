@@ -69,12 +69,7 @@ class _CustomerRegistationState extends State<CustomerRegistation> {
                 backgroundColor: Colors.green,
                  )
                );
-              
-              
-              
-               
-              
-        context.go('/customer/home');
+               context.go('/account/login');
      }
      else{       
       showDialog(

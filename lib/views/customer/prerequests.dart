@@ -159,7 +159,7 @@ int selectedcar = -1;
                                       deliveryLocation: _dropLocation.text,
                                       cargoDescription: _cargoDescription.text, 
                                       truckType:customerController.selectedTruckTypeId,
-                                       driverID: customerController.customerID
+                                      customerID: customerController.customerID
                                       
                                     //  truckID: jobRequestProvider.selectedTruckId,
                                       
