@@ -1,7 +1,10 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logisync_mobile/model/driver/driver.dart';
+import 'package:logisync_mobile/services/api_services.dart';
 import 'package:logisync_mobile/views/customer/current.dart';
-
+import 'package:intl/intl.dart';
 class DriverRegistration extends StatefulWidget {
   const DriverRegistration({super.key});
   @override
@@ -10,21 +13,88 @@ class DriverRegistration extends StatefulWidget {
 }
 
 class _DriverregistrationState extends State<DriverRegistration> {
-  final _registerFormKey = GlobalKey<FormState>();
- 
-   
+  final _registerFormKey = GlobalKey<FormState>();   
    final TextEditingController  _fullName = TextEditingController();  
   final TextEditingController _email = TextEditingController();
-  final TextEditingController  _lecencenumber = TextEditingController();
-  
- 
-  final TextEditingController _phonenumber= TextEditingController();
-  
+  final TextEditingController  _lecencenumber = TextEditingController(); 
+  final TextEditingController _phonenumber= TextEditingController();  
   final TextEditingController _password= TextEditingController();
   final TextEditingController _comfirmpassword= TextEditingController();
+    final TextEditingController _lecenceExpireDate= TextEditingController();
+  
   
   String? _selectedValue;
-  String? _classtypeValue;
+  late String _classtypeValue = 'Class A';
+  final ApiService _apiService= ApiService();
+
+
+   Future<void> _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime.now(),
+      lastDate: DateTime(2100),
+    );
+    if (pickedDate != null) {
+      setState(() {
+        _lecenceExpireDate.text = DateFormat('yyyy-MM-dd').format(pickedDate);
+      });
+    }
+  }
+
+void _submitForm() async {
+  final driver = DriverModal(
+    fullName: _fullName.text,
+    email: _email.text,
+    phone: _phonenumber.text,
+    licenseNumber: _lecencenumber.text,   
+    licenseClasses: _classtypeValue,
+    password: _password.text,  
+    imageUrl: 'dani/asasd.jpeg', 
+    licenseExpireDate:DateTime.parse(_lecenceExpireDate.text),
+  );
+
+  // Call the API service to register the driver
+  String response = await _apiService.registerDriver(driver);
+
+  // Parse response to determine if registration was successful
+  if (response == "Registration successful!") { 
+    // Show success dialog
+    showDialog(
+      context: context,
+      builder: (BuildContext context) => AlertDialog(
+        title: const Text("Registration Results"),
+        content: const Text("Registration successful!"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+              context.go('/Drivers/home'); // Redirect to the home page
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  } else {
+    // Show error dialog
+    showDialog(
+      context: context,
+      builder: (msg) => AlertDialog(
+        title: const Text("Registration Results"),
+        content: Text(response), // Display error message from the API
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(msg).pop(); // Close the dialog
+            },
+            child: const Text('OK'),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
   @override
   Widget build(BuildContext context) {
@@ -142,7 +212,7 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                 const SizedBox(height: 15),
                                 TextFormField(
                                   controller: _phonenumber,
-                                  keyboardType: TextInputType.phone,
+                                  keyboardType: TextInputType.text,
                                   decoration: InputDecoration(
                                       labelText: 'Phone Number',
                                       filled: true,
@@ -299,6 +369,38 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                 ),
                                 const SizedBox(height: 15),
                                 TextFormField(
+                                  controller: _lecenceExpireDate,
+                                  onTap:() =>_selectDate(context),
+                                  keyboardType: TextInputType.datetime,
+                                  decoration: InputDecoration(
+                                      labelText: 'Lecence Expiredate',
+                                      filled: true,
+                                      fillColor: Colors.grey[200],
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(30),
+                                        borderSide: const BorderSide(
+                                            color: Colors.purple),
+                                      ),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              vertical: 20, horizontal: 20),
+                                      prefixIcon: Padding(
+                                          padding: const EdgeInsets.all(12.0),
+                                          child: Image.asset(
+                                            'assets/icon/cash-on-delivery.png', // Your icon image path
+                                            height: 20,
+                                            width: 20,
+                                          ))
+                                          ),
+                                          validator: (value) {
+                                    if (value == null || value.isEmpty) {
+                                      return 'Please enter your expiredate';
+                                    }
+                                    return null;
+                                  },
+                                ),
+                                const SizedBox(height: 15),
+                                TextFormField(
                                   controller: _password,
                                   obscureText: true,
                                   decoration: InputDecoration(
@@ -372,7 +474,8 @@ class _DriverregistrationState extends State<DriverRegistration> {
                                   child: ElevatedButton(
                                     onPressed: () {
                                       if(_registerFormKey.currentState!.validate()){
-                                      context.go('/Drivers/home');
+                                    _submitForm();
+                                       
                                       }
                                       
                                     },

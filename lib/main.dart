@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:logisync_mobile/controllers/customer/jobrequestprovider.dart';
+import 'package:logisync_mobile/controllers/customer/registerandlogin.dart';
+import 'package:logisync_mobile/controllers/customerController.dart';
+import 'package:logisync_mobile/services/api_services.dart';
+import 'package:provider/provider.dart';
 import 'package:logisync_mobile/views/Drivers/home.dart';
 import 'package:logisync_mobile/views/account/driverRegistration.dart';
 import 'package:logisync_mobile/views/account/login.dart';
@@ -8,7 +13,18 @@ import 'package:logisync_mobile/views/customer/home.dart';
 import 'package:logisync_mobile/views/account/welcome.dart';
 import 'package:logisync_mobile/views/customer/homepage.dart';
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers:[
+      ChangeNotifierProvider(create: (context)=>ApiService()),
+      ChangeNotifierProvider(create: (context)=> LoginAndRegisterController()),
+      ChangeNotifierProvider(create: (context) => JobRequestProvider()),
+      ChangeNotifierProvider(create: (context) => CustomerController())
+      ],
+      child:const MyApp()
+    )
+    
+     );
 }
 
 class MyApp extends StatelessWidget {

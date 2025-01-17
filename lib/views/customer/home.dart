@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:logisync_mobile/controllers/customer/registerandlogin.dart';
+import 'package:logisync_mobile/controllers/customerController.dart';
 import 'package:logisync_mobile/views/customer/homepage.dart';
 import 'package:logisync_mobile/views/customer/prerequests.dart';
+import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Home extends StatefulWidget {
@@ -17,7 +21,25 @@ class HomeState extends State<Home> {
     setState(() {
       _selectedIndex = index;
     });
-  }
+  } 
+
+//code for appbar data 
+String? _userName ;
+
+@override
+void initState(){
+  super.initState();
+  _loadUserData();
+}
+ 
+ Future<void> _loadUserData() async{
+  final prefs= await SharedPreferences.getInstance();
+  setState(() {
+    _userName= prefs.getString('user_name');
+  });
+ }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -25,30 +47,36 @@ class HomeState extends State<Home> {
       backgroundColor:Colors.white,
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Row(
+        title: 
+        Consumer<CustomerController>(
+          builder: (context, CustomerController,child) {
+            return
+               Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Row(
+            
+             Row(
              
               children: [
-                CircleAvatar(
+                const CircleAvatar(
                   backgroundColor: Color.fromARGB(11, 219, 42, 26),
                   radius: 20,
                 ),
-                SizedBox(
+                const SizedBox(
                   width: 10,
                 ),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.start,
+                 crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Welcome, User',
-                      style: TextStyle(
+                       CustomerController.customerUsename,
+                      style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold
                       ),
                      ),
-                    Text(
+                    const Text(
                       'Location,Bunju Beach',
                       style: TextStyle(
                         fontSize: 14,
@@ -64,8 +92,11 @@ class HomeState extends State<Home> {
               onPressed: () {},
             )
           ],
-        ),
-      ),
+        );
+      
+          }
+        )
+       ),
       // Bottom navigation bar with floating action button in the center
       bottomNavigationBar: BottomAppBar(
         color: Colors.white,

@@ -1,71 +1,83 @@
 class CustomerModal {
-  final int? customerId ;
-  final String fullname;
+ 
+  final String fullName;
   final String email;
-  final  int phonenumber;
-  final  String address;
-  final  String? paymentinfo;
-  final  String password;
-  final  String?cardnumber;
-  final  String? cardtype;
-  final  String? billingaddress;
-  final  DateTime? expiredate;
-  final  String? bankname;
-  final  String? bankaccountnumber ;
-  final  String? bankaccountholder;
-  final  String? mobilenetwok;
-  final  int? mobilenumber;
-   final DateTime? dateCreated;
+  final String phone;
+  final String address;
+  final String? paymentMethod;
+  final String? cardNumber;
+  final String? cardType;
+  final String? billingAddress;
+  final DateTime? expiryDate;
+  final String? bankName;
+  final String? bankAccountNumber;
+  final String? bankAccountHolder;
+  final String? mobileNetwork;
+  final String? mobileNumber;
+  final List<String>? companies;
 
+  CustomerModal({
    
-  CustomerModal({this.cardnumber, this.cardtype, this.billingaddress, this.expiredate, this.bankname, this.bankaccountnumber, this.bankaccountholder, this.mobilenetwok, this.mobilenumber,this.customerId, required this.fullname, required this.email,required this.phonenumber, required this.address, this.paymentinfo, required this.password, DateTime? dateCreated} )
-            : dateCreated= dateCreated?? DateTime.now();
+    required this.fullName,
+    required this.email,
+    required this.phone,
+    required this.address,
+    this.paymentMethod,
+    this.cardNumber,
+    this.cardType,
+    this.billingAddress,
+    this.expiryDate,
+    this.bankName,
+    this.bankAccountNumber,
+    this.bankAccountHolder,
+    this.mobileNetwork,
+    this.mobileNumber,
+    this.companies,
+  });
 
-
-factory CustomerModal.fromJson(Map<String,dynamic> json) => CustomerModal(
-     customerId:json['customerId'] as int,
-     fullname: json['fullname'] as String, 
-     email: json['email'] as String,
-     phonenumber: json['phonenumber'] as int,
-     address: json['address'] as String,
-     paymentinfo:json[' paymentinfo'] as String,
-     password: json['password'] as String,
-     cardnumber:json['cardnumber'] as String,
-     cardtype:json['cardtype'] as String,
-     billingaddress:json['billingaddress'] as String,
-     expiredate:json['expiredate'] as DateTime,
-     bankname:json['bankname'] as String,
-     bankaccountnumber:json['bankaccountnumber'] as String,
-     bankaccountholder:json[' bankaccountholder'] as String,
-     mobilenumber:json['mobilenumberr'] as int,
-     mobilenetwok:json['mobilenetwok'] as String,
-
-     dateCreated: DateTime.parse(json['dateCreated'] as String)
-     
-     
+  factory CustomerModal.fromJson(Map<String, dynamic> json) {
+    return CustomerModal(
+      
+      fullName: json['fullName'] as String,
+      email: json['email'] as String,
+      phone: json['phone'] as String,
+      address: json['address'] as String,
+      paymentMethod: json['paymentMethod'] as String?,
+      cardNumber: json['cardNumber'] as String?,
+      cardType: json['cardType'] as String?,
+      billingAddress: json['billingAddress'] as String?,
+      expiryDate: json['expiryDate'] != null
+          ? DateTime.parse(json['expiryDate'])
+          : null,
+      bankName: json['bankName'] as String?,
+      bankAccountNumber: json['bankAccountNumber'] as String?,
+      bankAccountHolder: json['bankAccountHolder'] as String?,
+      mobileNetwork: json['mobileNetwork'] as String?,
+      mobileNumber: json['mobileNumber'] as String?,
+      companies: (json['companies'] as List<dynamic>?)
+          ?.map((item) => item as String)
+          .toList(),
      );
+  }
 
-
-  Map<String ,dynamic> toJson() => {
-     'customer_id': customerId,
-     'fullname': fullname,
-     'email': email,
-     'phonenumber': phonenumber,
-     'address': address,
-    ' payment_info':paymentinfo,
-     'password': password,
-    'dateCreated': dateCreated,
-    ' cardnumber': cardnumber,
-     'cardtype': cardtype,
-     'billingaddress': billingaddress,
-     'expiredate': expiredate,
-     ' bankname':  bankname,
-     'bankaccountnumber': bankaccountnumber,
-     'bankaccountholder': bankaccountholder,
-     ' mobilenumber':  mobilenumber,
-     ' mobilenetwok':  mobilenetwok,
-
-  };
-
-
+  Map<String, dynamic> toJson() {
+    return {
+      
+      'fullName': fullName,
+      'email': email,
+      'phone': phone,
+      'address': address,
+      'paymentMethod': paymentMethod,
+      'cardNumber': cardNumber,
+      'cardType': cardType,
+      'billingAddress': billingAddress,
+      'expiryDate': expiryDate?.toIso8601String(),
+      'bankName': bankName,
+      'bankAccountNumber': bankAccountNumber,
+      'bankAccountHolder': bankAccountHolder,
+      'mobileNetwork': mobileNetwork,
+      'mobileNumber': mobileNumber,
+      'companies': companies,
+    };
+  }
 }

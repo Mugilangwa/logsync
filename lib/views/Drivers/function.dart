@@ -7,6 +7,7 @@ class CustomModal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      // ignore: deprecated_member_use
       backgroundColor: Colors.black.withOpacity(0.5),
       body: Align(
         alignment: Alignment.center,

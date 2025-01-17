@@ -1,5 +1,10 @@
+
 import 'package:flutter/material.dart';
+import 'package:logisync_mobile/controllers/customer/jobrequestprovider.dart';
+import 'package:logisync_mobile/controllers/customerController.dart';
+import 'package:logisync_mobile/model/customer/request.dart';
 import 'package:logisync_mobile/views/customer/current.dart';
+import 'package:provider/provider.dart';
 
 class PreRequest extends StatelessWidget {
   const PreRequest({super.key});
@@ -22,19 +27,7 @@ class PreRequest extends StatelessWidget {
             Current(), // Using the Current widget here
             const Icon(Icons.directions_transit), // Example widget for the second tab
           ],
-        ),
-        // floatingActionButton: FloatingActionButton(
-        //   heroTag: 'uniqueTag2', // Ensure this tag is unique
-          
-        //   hoverColor: Colors.purple,
-        //   onPressed: () {
-        //     Navigator.push(
-        //       context,
-        //       MaterialPageRoute(builder: (context) => const CollapsibleForm ()),
-        //     );
-        //   },
-        //   child: const Icon(Icons.add),
-        // ),
+        ), 
       ),
     );
   }
@@ -47,16 +40,12 @@ class NoScrollbarBehavior extends ScrollBehavior {
     return child; // Return the child without a scrollbar
   }
 }
- 
- class CarType{
-  final String image;
-  final String label;
-
-  CarType({required this.image, required this.label});
- }
+  
 
 class CollapsibleForm extends StatefulWidget {
   const CollapsibleForm({super.key});
+
+  
 
   @override
   // ignore: library_private_types_in_public_api
@@ -65,32 +54,28 @@ class CollapsibleForm extends StatefulWidget {
 
 class _CollapsibleFormState extends State<CollapsibleForm> {
   List<bool> isExpandedList = List.filled(3, false); // Assuming there are 3 sections
+  
+  final TextEditingController _dropLocation = TextEditingController();
+  final TextEditingController _pickupLocation = TextEditingController();
+  final TextEditingController _referenceNumber= TextEditingController();
+  final TextEditingController _cargoDescription = TextEditingController();
+  
 
 int selectedcar = -1;
 // list of cartypes
-final List<CarType> cartypes = [
-  CarType(image:'assets/truck/fast-delivery.png', label: 'moto ride'),
-  CarType(image:'assets/truck/bajaji.png', label: 'Tuk-tuk'),
-  CarType(image:'assets/truck/tuktuk.png', label: 'Bajaji'),
-  CarType(image:'assets/truck/van.png', label: 'Van'),
-  CarType(image:'assets/truck/pickup-truck.png', label: 'Pick-Up'),
-  CarType(image:'assets/truck/truck.png', label: 'Truck'),
-  CarType(image:'assets/truck/box-truck.png', label: 'Box truck'),
-  CarType(image:'assets/truck/transport.png', label: 'FlatBed '),
-  CarType(image:'assets/truck/container.png', label: 'Container'),
-  
-];
-  @override
+   @override
   Widget build(BuildContext context) {
-    return 
-   Scaffold(
+         return 
+          Consumer<CustomerController>(builder: (context, customerController, child) {
+            return
+          Scaffold(
      appBar: AppBar(title: const Text('Request Details')),
       body:
        ScrollConfiguration(
         behavior: NoScrollbarBehavior(),
         child: SingleChildScrollView(
-          child: Form(
-            
+          child:          
+               Form(            
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,vertical: 10
@@ -160,7 +145,6 @@ final List<CarType> cartypes = [
                                    ),
                                    child: const Text(
                                      "Cancel",
-                                    
                                      style: TextStyle(
                                        fontSize: 17,
                                        color:Color.fromARGB(210, 247, 246, 240) ),
@@ -168,7 +152,51 @@ final List<CarType> cartypes = [
                                  ),
                                        const Spacer(),
                                         ElevatedButton(
-                                   onPressed: () {},
+                                   onPressed: () async {
+                                    //get data from data provider
+                                    final jobRequest = JobRequest(                                       
+                                      pickupLocation: _pickupLocation.text,
+                                      deliveryLocation: _dropLocation.text,
+                                      cargoDescription: _cargoDescription.text, 
+                                      truckType:customerController.selectedTruckTypeId,
+                                       driverID: customerController.customerID
+                                      
+                                    //  truckID: jobRequestProvider.selectedTruckId,
+                                      
+                                          );
+
+                            String result= await   Provider.of<JobRequestProvider>(context, listen:false).submitJobRequest(jobRequest);
+
+                                 if (result == "Request sent successfully!") {
+                                    showDialog(
+                                      context:context, 
+                                      builder: (abs)=> AlertDialog(
+                                        title: const Text("Request Results"),
+                                        content: Text(result),
+                                        actions: [
+                                          TextButton(
+                                      onPressed: () => Navigator.of(abs).pop(),
+                                      child: const Text("OK"))
+                                        ],
+                                      )
+                                      );
+                                 }
+                                 else{
+                                  showDialog(
+                                      context: context, 
+                                      builder: (abs)=> AlertDialog(
+                                        title: const Text("Request Results"),
+                                        content: Text(result),
+                                        actions: [
+                                          TextButton(
+                                      onPressed: () => Navigator.of(abs).pop(),
+                                      child: const Text("OK"))
+                                        ],
+                                      )
+                                      );
+                                 }
+                                              
+                                   },
                                    style: ElevatedButton.styleFrom(
                                      padding: const EdgeInsets.symmetric(
                                          horizontal: 35, vertical: 15),
@@ -192,11 +220,13 @@ final List<CarType> cartypes = [
                 ],
               ),
             ),
-          ),
-        ),
+               )
+            ),
       ),
     );
-  }
+
+      });
+     }
 
   // Function to provide specific titles based on the index
   String _getTitleForIndex(int index) {
@@ -222,6 +252,7 @@ final List<CarType> cartypes = [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
+                controller: _pickupLocation,
                 decoration: InputDecoration(
                   labelText: 'Pickup Location',
                   hintText: 'Please enter pickup point',
@@ -233,12 +264,19 @@ final List<CarType> cartypes = [
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return"please Enter your Pickup Location ";
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
+                controller: _dropLocation,
                 decoration: InputDecoration(
                   labelText: 'Drop Location',
                   hintText: 'Please enter drop point',
@@ -250,6 +288,13 @@ final List<CarType> cartypes = [
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return"please Enter your Dropdowm Location ";
+                  }
+                  return null;
+                },
+                
               ),
             ),
           ],
@@ -262,6 +307,7 @@ final List<CarType> cartypes = [
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
+              controller: _referenceNumber,
                 decoration: InputDecoration(
                   labelText: 'Reference Number',
                   hintText: 'Enter Reference Number of a cargo',
@@ -273,12 +319,19 @@ final List<CarType> cartypes = [
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return"please Enter your Reference Number";
+                  }
+                  return null;
+                },
               ),
             ),
             const SizedBox(height: 8),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 4),
               child: TextFormField(
+                controller: _cargoDescription,
                 maxLines: 3,
                 decoration: InputDecoration(
                   labelText: 'Cargo description',
@@ -291,6 +344,12 @@ final List<CarType> cartypes = [
                   ),
                   contentPadding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
                 ),
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return"please Enter your cargo description ";
+                  }
+                  return null;
+                },
               ),
             ),
           ],
@@ -298,55 +357,67 @@ final List<CarType> cartypes = [
 
       case 2:
         // ignore: avoid_unnecessary_containers
-        return Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 4),
-             child:  SizedBox(
-              height: 400,
-               child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  childAspectRatio: 1.0),
-               itemCount: cartypes.length,
-               itemBuilder:(context,index) {
-                  return ElevatedButton(
-                    onPressed:(){
-                      setState(() {
-                        selectedcar=index;
-                      });
-                    },
-                    style: ElevatedButton.styleFrom(
-                       backgroundColor: selectedcar == index ? Colors.purple :Colors.white,
-                       foregroundColor: selectedcar == index ? Colors.white : Colors.purple,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30)
+        return Consumer<CustomerController>(
+          builder:(context, customerController, child){
+             if (customerController.avilableTruckTypes.isEmpty) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return
+ Padding(
+   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 4),
+    child:  SizedBox(
+     height: 200,
+      child: GridView.builder(
+       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+         crossAxisCount: 2,
+         mainAxisSpacing: 7,
+         crossAxisSpacing: 7,
+         childAspectRatio: 1.0),
+      itemCount: customerController.avilableTruckTypes.length,
+      itemBuilder:(context,index) {
+        final availableTruckTypeData= customerController.avilableTruckTypes[index];
+         return ElevatedButton(
+           onPressed:(){
+             setState(() {
+               customerController.setSelectedTruckTypeData(availableTruckTypeData.truckTypeID, availableTruckTypeData.typeName);
+              
+             });
+           },
+           style: ElevatedButton.styleFrom(
+              backgroundColor: customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.purple :Colors.white,
+              foregroundColor:customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.white : Colors.purple,
+             shape: RoundedRectangleBorder(
+               borderRadius: BorderRadius.circular(30)
+             )
+           ),
+            child:Column(
+              
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                      Image.asset(
+                       customerController.avilableTruckTypes[index].sampleImageUrl,
+                       height: 90,
+                       width: 90,
+                      ),
+                      Text(
+                      customerController.avilableTruckTypes[index].typeName,
+                       style: const TextStyle(
+                         fontSize: 15,
+                         fontWeight: FontWeight.bold
+                       ),
                       )
-                    ),
-                     child:Column(
-                           mainAxisAlignment: MainAxisAlignment.center,
-                           children: [
-                               Image.asset(
-                                cartypes[index].image,
-                                height: 100,
-                                width: 100,
-                               ),
-                               Text(
-                                cartypes[index].label,
-                                style: const TextStyle(
-                                  fontSize: 15,
-                                  fontWeight: FontWeight.bold
-                                ),
-                               )
-                                   ],
-                     )
-                    );
-               }),
-             ),
-              ),
-        );
+                          ],
+            )
+           );
+      }),
+    ),
+     );
 
+
+        }
+        );
+        
+       
       default:
         return Container();
     }
