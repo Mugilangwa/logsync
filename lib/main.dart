@@ -38,7 +38,7 @@ void main() async {
         ChangeNotifierProvider(create: (context) => ApiService()),
         ChangeNotifierProvider(create: (context) => LoginAndRegisterController()),
         ChangeNotifierProvider(create: (context) => JobRequestProvider()),
-        ChangeNotifierProvider(create: (context) => CustomerController()),
+        ChangeNotifierProvider(create: (_) => CustomerController()),
       ],
       child: MyApp(initialRoute: initialRoute),
     ),

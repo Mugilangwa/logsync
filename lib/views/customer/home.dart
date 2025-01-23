@@ -26,29 +26,16 @@ class HomeState extends State<Home> {
   } 
 
 //code for appbar data 
-String? _userName ;
+
 
 @override
 void initState(){
-  super.initState();
-  checkLoginStatus(context);
-  _loadUserData();
+  super.initState(  
+  );
+  final customerController = Provider.of<CustomerController>(context,listen: false);
+   customerController.checkLoginStatus(context);
+   customerController.loadUserData();
 }
-
-//for checking if user is logged in or not
-void checkLoginStatus(BuildContext context) async {
-  final isLoggedIn= await SessionManager.isLoggedIn();
-  if (!isLoggedIn) {
-   GoRouter.of(context).go('/account/login');
-  }
-}
- 
- Future<void> _loadUserData() async{
-  final prefs= await SharedPreferences.getInstance();
-  setState(() {
-    _userName= prefs.getString('user_name');
-  });
- }
 
 
 
@@ -60,7 +47,7 @@ void checkLoginStatus(BuildContext context) async {
         backgroundColor: Colors.white,
         title: 
         Consumer<CustomerController>(
-          builder: (context, CustomerController,child) {
+          builder: (context, customerController,child) {
             return
                Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -81,7 +68,7 @@ void checkLoginStatus(BuildContext context) async {
                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                       CustomerController.customerUsename,
+                      customerController.customerUsername ?? '',
                       style: const TextStyle(
                         fontSize: 17,
                         fontWeight: FontWeight.bold

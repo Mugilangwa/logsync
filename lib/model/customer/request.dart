@@ -67,6 +67,8 @@ class JobRequest {
     );
   }
 
+ 
+
   // From JobRequest object to JSON
   Map<String, dynamic> toJson() {
     return {

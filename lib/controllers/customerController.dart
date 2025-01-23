@@ -1,59 +1,110 @@
-
-
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:location/location.dart';
 import 'package:logisync_mobile/model/customer/request.dart';
 import 'package:http/http.dart' as http;
-import 'package:logisync_mobile/shared/session_manager.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../model/customer/jobRequest.dart';
 import '../model/truck.dart';
 import '../services/api_services.dart';
 import '../shared/constants.dart';
 
-class CustomerController extends ChangeNotifier{
 
-JobRequest? jobRequest;
-JobRequest? activeJobRequest; 
-List<TruckType> avilableTruckTypes = [];
-String? selectedTruckTypeId;
-String? selectedTruckTypeName;
-String customerUsename = 'customer';
-String? userType;
-String? customerID;
+class CustomerController extends ChangeNotifier {
+  List<ActiveRequest> listOfCompanyReplied = [];
+  List<ActiveRequest> listOfJobsRequested = [];
+  ActiveRequest? activeRequest;
+  ActiveRequest? jobOnNegotiation;
+  JobRequest? jobRequest;
+  JobRequest? activeJobRequest;
+  List<TruckType> availableTruckTypes = [];
+  String? selectedTruckTypeId;
+  String? selectedTruckTypeName;
+  String? customerUsername;
+  String? userType;
+  String? customerID;
 
- CustomerController(){
-  initializer();
- }
+  LatLng? currentCustomerLocation;
+  late GoogleMapController mapController;
+  LocationData? currentLocation;
+  final Location locationService = Location();
+  bool serviceEnabled = false;
+  PermissionStatus? permissionGranted;
 
-   Future<void> initializer() async {
-   await fetchTruckTypes();
-   
-   }
-
- Future<void> fetchTruckTypes() async {
-  try {
-
-    // Fetch the truck data from the API service
-    var response = await ApiService.getTruckData();
-  
-    // Ensure the response is not null and contains data
-    if (response != null && response.isNotEmpty) {
-      avilableTruckTypes = response.map((data) => TruckType.fromJson(data)).toList();
-      notifyListeners();
-    } else {
-      print("No trucks available.");
-    }
-  } catch (e) {
-    print("Error fetching trucks: $e");
+  CustomerController() {
+    _initialize();
   }
-}
 
+  Future<void> _initialize() async {
+    await loadUserData();
+    await fetchTruckTypes();
+  }
 
-Future<String> createJobRequest(JobRequest jobRequestPayload) async{
+  // Check login status
+  void checkLoginStatus(BuildContext context) async {
+    final checkIsLoggedIn = await isLoggedIn();
+    if (!checkIsLoggedIn ) {
+      GoRouter.of(context).go('/account/login');
+    }
+  }
 
-  const url = "${API_BASE_URL}JobRequest/CreateJobRequest";  
-    
+  // Load user data from shared preferences
+  Future<void> loadUserData() async {
+    final prefs = await SharedPreferences.getInstance();
+    customerUsername = prefs.getString('username');
+    customerID = prefs.getString('customerID');
+    notifyListeners();
+  }
+
+  // Save user session
+  Future<void> saveUserSession(String username, String customerId) async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.setString('username', username);
+    prefs.setString('customerID', customerId);
+    prefs.setBool('isLoggedIn', true);
+  }
+
+  // Clear session data
+  Future<void> clearSession() async {
+    final prefs = await SharedPreferences.getInstance();
+    prefs.clear();
+  }
+
+  // Check if user is logged in
+  Future<bool> isLoggedIn() async {
+    final prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('isLoggedIn') ?? false;
+  }
+
+  // Fetch truck types
+  Future<void> fetchTruckTypes() async {
+    try {
+      final response = await ApiService.getTruckData();
+      if (response != null && response.isNotEmpty) {
+        availableTruckTypes =
+            response.map((data) => TruckType.fromJson(data)).toList();
+        notifyListeners();
+      } else {
+        print("No trucks available.");
+      }
+    } catch (e) {
+      print("Error fetching trucks: $e");
+    }
+  }
+
+  // Set selected truck type
+  void setSelectedTruckTypeData(String truckTypeID, String truckTypeName) {
+    selectedTruckTypeId = truckTypeID;
+    selectedTruckTypeName = truckTypeName;
+    notifyListeners();
+  }
+
+  // Create job request
+  Future<String> createJobRequest(JobRequest jobRequestPayload) async {
+    const url = "${API_BASE_URL}JobRequest/CreateJobRequest";
+
     try {
       final response = await http.post(
         Uri.parse(url),
@@ -62,145 +113,189 @@ Future<String> createJobRequest(JobRequest jobRequestPayload) async{
       );
 
       if (response.statusCode == 200) {
-        // Successfully submitted
         activeJobRequest = jobRequestPayload;
         notifyListeners();
         return 'Request sent successfully!';
-      } 
-      else {
-        // Handle failure
+      } else {
         throw Exception('Failed to submit job request');
       }
     } catch (error) {
-      // Handle error
       return 'Error: $error';
-    }  
-       
-     
+    }
   }
 
+  // Login
+  Future<void> login(String email, String password, BuildContext context) async {
+    final loginUrl = Uri.parse("$API_BASE_URL/SecUser/Login");
 
- void setSelectedTruckTypeData(String truckTypeID ,String truckTypeName){
+    try {
+      final response = await http.post(
+        loginUrl,
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode({'email': email, 'password': password}),
+      );
 
-    selectedTruckTypeId= truckTypeID;
-    selectedTruckTypeName = truckTypeName;
-    notifyListeners();
-
-    }
-    
-
-//method for login
-Future<void> login(String email, String password, BuildContext context) async {
-  final loginUrl = Uri.parse("$API_BASE_URL/SecUser/Login");
-
-  try {
-    final response = await http.post(
-      loginUrl,
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: jsonEncode({
-        'email': email,
-        'password': password,
-      }),
-    );
-
-if (response.statusCode == 200) {
+      if (response.statusCode == 200) {
         final data = jsonDecode(response.body);
-        // Extract details from response
-       customerID = data["data"]["userID"];
-       userType = data["data"]["role"];    
-       customerUsename = data["data"]["email"];
-              // Save data to shared preferences
-       await saveUserSession(customerUsename, data["data"]["userID"]);
+        customerID = data["data"]["userID"];
+        userType = data["data"]["role"];
+        customerUsername = data["data"]["email"];
+        await saveUserSession(customerUsername!, customerID!);
 
-               // Navigate based on role
         if (userType == "CUSTOMER") {
-         GoRouter.of(context).go('/customer/Home');
+          GoRouter.of(context).go('/customer/Home');
         } else if (userType == "DRIVER") {
-         GoRouter.of(context).go('/driver/Home');
-        } 
+          GoRouter.of(context).go('/driver/Home');
+        }
+
         ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("welcome again! $customerUsename"),duration: Duration(seconds: 4),),
-      );
-      notifyListeners();
-       
-    } 
-    else {
-      final error = jsonDecode(response.body)['message'] ?? 'Unknown error';
-      ScaffoldMessenger.of(error).showSnackBar(
-        SnackBar(content: Text("Error during login: $error"),duration: Duration(minutes: 1)),
+          SnackBar(
+            content: Text("Welcome back! $customerUsername"),
+            duration: const Duration(seconds: 4),
+          ),
+        );
+        notifyListeners();
+      } else {
+        final error = jsonDecode(response.body)['message'] ?? 'Unknown error';
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("Error during login: $error"),
+            duration: const Duration(seconds: 60),
+          ),
+        );
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Error during login: $e"),
+          duration: const Duration(seconds: 60),
+        ),
       );
     }
-  } catch (e) {
-          ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text("Error during login: $e"),duration: Duration(minutes: 1)),
-      );  
-  }
-}
-
-
-//method of save session
-
-static Future<void> saveUserSession(String username, String customerId) async {
-  final prefs = await SharedPreferences.getInstance();
-  prefs.setString('username', username);
-  prefs.setString('customerId', customerId);
-  prefs.setBool('isLoggedIn', true);
-
-}
-//method for clear usersession data
-static Future<void>clearSession() async {
-  final prefs =await SharedPreferences.getInstance();
-  prefs.clear();
-}
-
-static Future<bool> isLoggedIn() async {
-    final prefs = await SharedPreferences.getInstance();
-    return prefs.getBool('isLoggedIn') ?? false;
   }
 
- 
- List<Map<String,dynamic>> listOfJobsRequested = [];
+  // Get customer job requests
+  Future<void> getCustomerJobRequest(String customerID) async {
+    final url = Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$customerID');
 
-Future<List<Map<String,dynamic>>?> getCustomerJobRequest() async{
-  
-  final getCustomerJobRequestUrl =  Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$customerID');
-  
-  try {
- final response = await http.get(
-      getCustomerJobRequestUrl,
-      headers: {'Content-Type':'application/json'},
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
       );
 
-if (response.statusCode==200) {
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body)['data'] as List;
+        listOfJobsRequested =
+            data.map((job) => ActiveRequest.fromJson(job)).toList();
+        notifyListeners();
+      } else {
+        print('Failed to fetch job requests. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+// get customer location
+Future<void> getLocationUpdates() async {
+    bool serviceEnabled = await locationService.serviceEnabled();
+    if (!serviceEnabled) {
+      serviceEnabled = await locationService.requestService();
+      if (!serviceEnabled) {
+        return;
+      }
+    }
+    PermissionStatus permissionGranted = await locationService.hasPermission();
+    if (permissionGranted == PermissionStatus.denied) {
+      permissionGranted = await locationService.requestPermission();
+      if (permissionGranted != PermissionStatus.granted) {
+        return;
+      }
+    }
+
+    locationService.onLocationChanged.listen((LocationData currentLocation) {
+      if (currentLocation.latitude != null && currentLocation.longitude != null) {
+         currentCustomerLocation = LatLng(currentLocation.latitude!, currentLocation.longitude!);
+        // updateRoute();
+        updateCameraPosition(currentCustomerLocation as LocationData);
+       
+        notifyListeners();
+      }
+    });
+
+    notifyListeners();
   
-final  Map<String,dynamic> data= jsonDecode(response.body);
-
-
-
-}
- 
-
-  } catch (e) {
-    
+  }
+ Future<void> updateCameraPosition(LocationData locationData) async {
+    if (locationData.latitude != null && locationData.longitude != null) {
+      final GoogleMapController controller = mapController;
+      controller.animateCamera(
+        CameraUpdate.newCameraPosition(
+          CameraPosition(
+            target: LatLng(locationData.latitude!, locationData.longitude!),
+            zoom: 18,
+            tilt: 60.0,
+            bearing: 180.0,
+          ),
+        ),
+      );
+    }
+    notifyListeners();
   }
 
+  //get the jobrequest by id in negotiate
+     Future<void> getJobRequestById(String jobRequestID) async {
+    final url = Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$jobRequestID');
+     
+    try {
+      final response = await http.get(
+        url,
+        headers: {'Content-Type': 'application/json'},
+      );
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body)['data'] as List;
+        listOfCompanyReplied =data.map((job) => ActiveRequest.fromJson(job)).toList();
+        notifyListeners();
+      } else {
+        print('Failed to fetch job requests. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error occurred: $e');
+    }
+  }
+
+
+  //method to setjobrequestid during negotiation
+  void setJobRequestID(String jobRequestID) {
+   jobRequestID = jobRequestID;
+    notifyListeners();
+  }
+
+// updatejob request
+  Future<String> updateJobRequestByJobrequestId(JobRequest jobRequestPayload)  async {
+    final url = "${API_BASE_URL}JobRequest/UpdateJobRequest/$jobRequestPayload.jobRequestID";
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: json.encode(jobRequestPayload.toJson()),
+      );
+
+      if (response.statusCode == 200) {
+        activeJobRequest = jobRequestPayload;
+        notifyListeners();
+        return 'Request sent successfully!';
+      } else {
+        throw Exception('Failed to submit job request');
+      }
+    } catch (error) {
+      return 'Error: $error';
+    }
+  }
+
+  void setActiveRequest(ActiveRequest job) {
+    jobOnNegotiation = job;
+    notifyListeners();
+  
 }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
- 

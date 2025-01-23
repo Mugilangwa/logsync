@@ -61,6 +61,9 @@ class _CollapsibleFormState extends State<CollapsibleForm> {
   final TextEditingController _cargoDescription = TextEditingController();
   
 
+  
+
+
 int selectedcar = -1;
 // list of cartypes
    @override
@@ -134,7 +137,14 @@ int selectedcar = -1;
                                  child:  Row(
                                         children: [
                                            ElevatedButton(
-                                   onPressed: () {},
+                                   onPressed: () async {
+                                      _cargoDescription.clear();
+                                      _dropLocation.clear();
+                                      _pickupLocation.clear();
+                                      _referenceNumber.clear();
+
+                                      Navigator.of(context).pop();
+                                   },
                                    style: ElevatedButton.styleFrom(
                                      padding: const EdgeInsets.symmetric(
                                          horizontal: 35, vertical:15, ),
@@ -159,10 +169,9 @@ int selectedcar = -1;
                                       deliveryLocation: _dropLocation.text,
                                       cargoDescription: _cargoDescription.text, 
                                       truckType:customerController.selectedTruckTypeId,
-                                      customerID: customerController.customerID
+                                      customerID: customerController.customerID,
                                       
-                                    //  truckID: jobRequestProvider.selectedTruckId,
-                                      
+                                    
                                           );
 
                             String result= await   Provider.of<JobRequestProvider>(context, listen:false).submitJobRequest(jobRequest);
@@ -180,6 +189,11 @@ int selectedcar = -1;
                                         ],
                                       )
                                       );
+                                      _cargoDescription.clear();
+                                      _dropLocation.clear();
+                                      _pickupLocation.clear();
+                                      _referenceNumber.clear();
+                                      
                                  }
                                  else{
                                   showDialog(
@@ -359,7 +373,7 @@ int selectedcar = -1;
         // ignore: avoid_unnecessary_containers
         return Consumer<CustomerController>(
           builder:(context, customerController, child){
-             if (customerController.avilableTruckTypes.isEmpty) {
+             if (customerController.availableTruckTypes.isEmpty) {
               return const Center(child: CircularProgressIndicator());
             }
             return
@@ -373,9 +387,9 @@ int selectedcar = -1;
          mainAxisSpacing: 7,
          crossAxisSpacing: 7,
          childAspectRatio: 1.0),
-      itemCount: customerController.avilableTruckTypes.length,
+      itemCount: customerController.availableTruckTypes.length,
       itemBuilder:(context,index) {
-        final availableTruckTypeData= customerController.avilableTruckTypes[index];
+        final availableTruckTypeData= customerController.availableTruckTypes[index];
          return ElevatedButton(
            onPressed:(){
              setState(() {
@@ -395,12 +409,12 @@ int selectedcar = -1;
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                       Image.asset(
-                       customerController.avilableTruckTypes[index].sampleImageUrl,
+                       customerController.availableTruckTypes[index].sampleImageUrl,
                        height: 90,
                        width: 90,
                       ),
                       Text(
-                      customerController.avilableTruckTypes[index].typeName,
+                      customerController.availableTruckTypes[index].typeName,
                        style: const TextStyle(
                          fontSize: 15,
                          fontWeight: FontWeight.bold
