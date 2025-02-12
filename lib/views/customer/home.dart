@@ -1,12 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
-import 'package:logisync_mobile/controllers/customer/registerandlogin.dart';
 import 'package:logisync_mobile/controllers/customerController.dart';
-import 'package:logisync_mobile/shared/session_manager.dart';
 import 'package:logisync_mobile/views/customer/homepage.dart';
 import 'package:logisync_mobile/views/customer/prerequests.dart';
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Home extends StatefulWidget {
@@ -103,9 +99,9 @@ void initState(){
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween, // Distributes space equally
           children: <Widget>[
-            _buildNavItem(Icons.home , "Home", 0),
+            _buildNavItem(Icons.home_rounded , "Home", 0),
              
-            _buildNavItem(Icons.request_page_sharp, "Request", 1),
+            _buildNavItem(Icons.request_page_rounded, "Request", 1),
            
             _buildNavItem(Icons.payment_sharp, "Payment", 2),
           
@@ -121,7 +117,7 @@ void initState(){
         onPressed: () {
            Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const CollapsibleForm ()));
+              MaterialPageRoute(builder: (context) =>  CollapsibleForm ()));
         }, // Use central icon
         backgroundColor: Colors.purple,
         child: const Icon(Icons.add),

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
+import 'package:logisync_mobile/model/customer/company.dart';
 import 'package:logisync_mobile/model/customer/request.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -13,18 +14,20 @@ import '../shared/constants.dart';
 
 
 class CustomerController extends ChangeNotifier {
-  List<ActiveRequest> listOfCompanyReplied = [];
+  List<ActiveRequest>listOfCompanyReplied =[];
   List<ActiveRequest> listOfJobsRequested = [];
   ActiveRequest? activeRequest;
   ActiveRequest? jobOnNegotiation;
   JobRequest? jobRequest;
   JobRequest? activeJobRequest;
   List<TruckType> availableTruckTypes = [];
+  List<Negotiation> listOfNegotiations = [];
   String? selectedTruckTypeId;
   String? selectedTruckTypeName;
   String? customerUsername;
   String? userType;
   String? customerID;
+  bool isLoading = false;
 
   LatLng? currentCustomerLocation;
   late GoogleMapController mapController;
@@ -32,6 +35,17 @@ class CustomerController extends ChangeNotifier {
   final Location locationService = Location();
   bool serviceEnabled = false;
   PermissionStatus? permissionGranted;
+
+//variables in pricenegotiatians
+
+bool showInputField = false;
+bool isVisible = false;
+bool isChecked = false;
+bool isAgree = false;
+
+//valiable fro company
+Company? allCompany ;
+
 
   CustomerController() {
     _initialize();
@@ -154,13 +168,13 @@ class CustomerController extends ChangeNotifier {
             duration: const Duration(seconds: 4),
           ),
         );
-        notifyListeners();
+      notifyListeners();
       } else {
         final error = jsonDecode(response.body)['message'] ?? 'Unknown error';
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text("Error during login: $error"),
-            duration: const Duration(seconds: 60),
+            duration: const Duration(seconds: 4),
           ),
         );
       }
@@ -168,7 +182,7 @@ class CustomerController extends ChangeNotifier {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text("Error during login: $e"),
-          duration: const Duration(seconds: 60),
+          duration: const Duration(seconds: 4),
         ),
       );
     }
@@ -176,6 +190,9 @@ class CustomerController extends ChangeNotifier {
 
   // Get customer job requests
   Future<void> getCustomerJobRequest(String customerID) async {
+    if(isLoading) return;
+    isLoading= true;
+    
     final url = Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$customerID');
 
     try {
@@ -185,9 +202,12 @@ class CustomerController extends ChangeNotifier {
       );
 
       if (response.statusCode == 200) {
+       // Print the JSON data before decoding
+
         final data = jsonDecode(response.body)['data'] as List;
-        listOfJobsRequested =
-            data.map((job) => ActiveRequest.fromJson(job)).toList();
+          
+        listOfJobsRequested = data.map((job) => ActiveRequest.fromJson(job)).toList();
+        
         notifyListeners();
       } else {
         print('Failed to fetch job requests. Status code: ${response.statusCode}');
@@ -195,6 +215,11 @@ class CustomerController extends ChangeNotifier {
     } catch (e) {
       print('Error occurred: $e');
     }
+    finally {
+      isLoading=false;
+      notifyListeners();
+    }
+    
   }
 // get customer location
 Future<void> getLocationUpdates() async {
@@ -244,25 +269,39 @@ Future<void> getLocationUpdates() async {
   }
 
   //get the jobrequest by id in negotiate
-     Future<void> getJobRequestById(String jobRequestID) async {
-    final url = Uri.parse('$API_BASE_URL/JobRequest/GetCustomerJobRequest/$jobRequestID');
-     
-    try {
-      final response = await http.get(
-        url,
-        headers: {'Content-Type': 'application/json'},
-      );
-      if (response.statusCode == 200) {
-        final data = jsonDecode(response.body)['data'] as List;
-        listOfCompanyReplied =data.map((job) => ActiveRequest.fromJson(job)).toList();
+  Future<ActiveRequest?> getJobRequestById(String jobRequestID) async {
+  // Notify UI about loading state
+
+  final url = Uri.parse('$API_BASE_URL/JobRequest/GetJobRequestById/$jobRequestID');
+  
+  try {
+    final response = await http.get(
+      url,
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final responseBody = jsonDecode(response.body);
+      final data = responseBody['data']; // Ensure 'data' contains the job request
+      print(data);
+      if (data is Map) {
+        ActiveRequest activeJobRequest = ActiveRequest.fromJson(data as Map<String, dynamic>);
+        print(activeJobRequest);
         notifyListeners();
+        return activeJobRequest; // Return the parsed object
       } else {
-        print('Failed to fetch job requests. Status code: ${response.statusCode}');
+        print('Unexpected data format: $data');
+        return null;
       }
-    } catch (e) {
-      print('Error occurred: $e');
+    } else {
+      print('Failed to fetch job request. Status code: ${response.statusCode}');
+      return null;
     }
-  }
+  } catch (e) {
+    print('Error occurred: $e');
+    return null;
+  } 
+}
 
 
   //method to setjobrequestid during negotiation
@@ -273,7 +312,7 @@ Future<void> getLocationUpdates() async {
 
 // updatejob request
   Future<String> updateJobRequestByJobrequestId(JobRequest jobRequestPayload)  async {
-    final url = "${API_BASE_URL}JobRequest/UpdateJobRequest/$jobRequestPayload.jobRequestID";
+    final url = "${API_BASE_URL}JobRequest/UpdateJobRequest/${jobRequestPayload.jobRequestID}";
     try {
       final response = await http.put(
         Uri.parse(url),
@@ -284,7 +323,7 @@ Future<void> getLocationUpdates() async {
       if (response.statusCode == 200) {
         activeJobRequest = jobRequestPayload;
         notifyListeners();
-        return 'Request sent successfully!';
+        return 'success';
       } else {
         throw Exception('Failed to submit job request');
       }
@@ -297,5 +336,83 @@ Future<void> getLocationUpdates() async {
     jobOnNegotiation = job;
     notifyListeners();
   
+  }
+   //methods in pricenegotiations 
+    void toggleNegotiationField() {    
+      showInputField = !showInputField;
+       
+       isVisible= !isVisible;
+       notifyListeners();
+       }
+     void toggleIsChecked() {    
+      
+       isChecked = ! isChecked;
+       notifyListeners();
+       }
+     void toggleIsAgree() {    
+      
+       isAgree = !isAgree;
+       ;
+       notifyListeners();
+       }
+    
+  //method to get the all company
+   Future<void> getAllCompany( String companyId) async{
+    if(isLoading) return;
+    isLoading= true;
+     print('ndani ya method $companyId');
+    final uri = '${API_BASE_URL}Company/GetCompanyById/$companyId';
+
+    try {
+      final response= await http.get(
+        Uri.parse(uri),          
+        headers: {'Content-Type': 'application/json'},
+        );
+
+        if (response.statusCode == 200) {
+           final responceBody = jsonDecode(response.body);
+           final data= responceBody["data"];
+           
+           allCompany= Company.fromJson(data as Map<String, dynamic>);
+          
+          notifyListeners();
+        }
+
+        else{
+          print("fail to load company${response.statusCode}");
+        }
+      
+    } catch (error) {
+      print('Error: $error');
+   }
+   finally {
+    isLoading= false;
+   }
+   
+   }
+
+   //to delete request
+   Future<String> deleteActiveRequest(String jobRequestID) async {
+  final uri = '${API_BASE_URL}JobRequest/DeleteJobRequest/$jobRequestID';
+
+  try {
+    final response = await http.delete(
+      Uri.parse(uri),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      jsonDecode(response.body);
+      notifyListeners();
+      return 'Request deleted successfully!';
+    } else {
+      print('Failed to delete request. Status code: ${response.statusCode}');
+      return 'Failed to delete request. Status code: ${response.statusCode}';
+    }
+  } catch (error) {
+    print('Error: $error');
+    return 'Error: $error';
+  }
 }
+   
 }

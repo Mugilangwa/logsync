@@ -46,6 +46,7 @@ dependencies:
   go_router: ^14.3.0
   xen_popup_card: ^0.0.3+2
   http: ^1.2.2
+  dotted_line: ^3.2.3
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -129,3 +130,6 @@ flutter:
     - assets/icon/private-account.png
     - assets/icon/sim-card.png
     - assets/icon/map.png
+    - assets/banner1.jpg
+    - assets/banner.jpg
+    - assets/banner2.jpg

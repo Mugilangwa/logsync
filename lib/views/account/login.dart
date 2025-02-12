@@ -25,7 +25,7 @@ class Login extends StatelessWidget {
               flex: 2,
               child: Container(
                 decoration: const BoxDecoration(
-                  color: Color.fromARGB(255, 121, 209, 20),
+                  color:Colors.white24,
                   borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(30),
                       bottomRight: Radius.circular(30)),

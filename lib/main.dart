@@ -61,7 +61,8 @@ class MyApp extends StatelessWidget {
     // Redirect to login if the user is not logged in
     if (!isLoggedIn ) {
       return '/account/login';
-    };
+    }
+return null;
       }, routes: [
         ShellRoute(
           builder: (context, state, child) {

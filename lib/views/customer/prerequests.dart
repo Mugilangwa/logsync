@@ -14,8 +14,8 @@ class PreRequest extends StatelessWidget {
     return DefaultTabController(
       length: 2, // Number of tabs
       child: Scaffold(
-        appBar: AppBar(
-              bottom: const TabBar(
+        appBar: AppBar(title: 
+               const TabBar(
             tabs: [
               Tab(text: 'Current'), // First tab
               Tab(text: 'Recent'),  // Second tab
@@ -43,10 +43,10 @@ class NoScrollbarBehavior extends ScrollBehavior {
   
 
 class CollapsibleForm extends StatefulWidget {
-  const CollapsibleForm({super.key});
+  CollapsibleForm({super.key});
+
 
   
-
   @override
   // ignore: library_private_types_in_public_api
   _CollapsibleFormState createState() => _CollapsibleFormState();
@@ -54,13 +54,14 @@ class CollapsibleForm extends StatefulWidget {
 
 class _CollapsibleFormState extends State<CollapsibleForm> {
   List<bool> isExpandedList = List.filled(3, false); // Assuming there are 3 sections
-  
+    
+final GlobalKey<FormState>  _requestFormKey= GlobalKey<FormState>();
   final TextEditingController _dropLocation = TextEditingController();
   final TextEditingController _pickupLocation = TextEditingController();
   final TextEditingController _referenceNumber= TextEditingController();
   final TextEditingController _cargoDescription = TextEditingController();
   
-
+  final String  _requestType= 'TRUCK WITH DRIVER';
   
 
 
@@ -78,7 +79,8 @@ int selectedcar = -1;
         behavior: NoScrollbarBehavior(),
         child: SingleChildScrollView(
           child:          
-               Form(            
+               Form(  
+                key: _requestFormKey,          
             child: Padding(
               padding: const EdgeInsets.symmetric(
                 horizontal: 20,vertical: 10
@@ -163,6 +165,9 @@ int selectedcar = -1;
                                        const Spacer(),
                                         ElevatedButton(
                                    onPressed: () async {
+                                    if (_requestFormKey.currentState!.validate()) {
+                                      
+                                   
                                     //get data from data provider
                                     final jobRequest = JobRequest(                                       
                                       pickupLocation: _pickupLocation.text,
@@ -170,8 +175,8 @@ int selectedcar = -1;
                                       cargoDescription: _cargoDescription.text, 
                                       truckType:customerController.selectedTruckTypeId,
                                       customerID: customerController.customerID,
-                                      
-                                    
+                                      requestType : _requestType,
+                                      containerNumber: _referenceNumber.text,
                                           );
 
                             String result= await   Provider.of<JobRequestProvider>(context, listen:false).submitJobRequest(jobRequest);
@@ -191,9 +196,6 @@ int selectedcar = -1;
                                       );
                                       _cargoDescription.clear();
                                       _dropLocation.clear();
-                                      _pickupLocation.clear();
-                                      _referenceNumber.clear();
-                                      
                                  }
                                  else{
                                   showDialog(
@@ -208,9 +210,14 @@ int selectedcar = -1;
                                         ],
                                       )
                                       );
-                                 }
+                                 }     _pickupLocation.clear();
+                                      _referenceNumber.clear();
+                                  
+                                    }    
+                                 },
+                                 
                                               
-                                   },
+                                   
                                    style: ElevatedButton.styleFrom(
                                      padding: const EdgeInsets.symmetric(
                                          horizontal: 35, vertical: 15),
@@ -377,55 +384,115 @@ int selectedcar = -1;
               return const Center(child: CircularProgressIndicator());
             }
             return
- Padding(
-   padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 4),
-    child:  SizedBox(
-     height: 200,
-      child: GridView.builder(
-       gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-         crossAxisCount: 2,
-         mainAxisSpacing: 7,
-         crossAxisSpacing: 7,
-         childAspectRatio: 1.0),
-      itemCount: customerController.availableTruckTypes.length,
-      itemBuilder:(context,index) {
-        final availableTruckTypeData= customerController.availableTruckTypes[index];
-         return ElevatedButton(
-           onPressed:(){
-             setState(() {
-               customerController.setSelectedTruckTypeData(availableTruckTypeData.truckTypeID, availableTruckTypeData.typeName);
-              
-             });
-           },
-           style: ElevatedButton.styleFrom(
-              backgroundColor: customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.purple :Colors.white,
-              foregroundColor:customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.white : Colors.purple,
-             shape: RoundedRectangleBorder(
-               borderRadius: BorderRadius.circular(30)
-             )
-           ),
-            child:Column(
-              
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                      Image.asset(
-                       customerController.availableTruckTypes[index].sampleImageUrl,
-                       height: 90,
-                       width: 90,
-                      ),
-                      Text(
-                      customerController.availableTruckTypes[index].typeName,
-                       style: const TextStyle(
-                         fontSize: 15,
-                         fontWeight: FontWeight.bold
-                       ),
-                      )
-                          ],
-            )
-           );
-      }),
-    ),
-     );
+ Column(
+   children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0,vertical: 20),
+              child: DropdownButtonFormField(
+                                            value: _requestType,
+                                             items: <String>[
+                                              'TRUCK WITH DRIVER',
+                                              'DRIVER ONLY',
+                                              'TRUCK ONLY',
+                                              
+                                            ].map((String value) {
+                                              return DropdownMenuItem(
+                                                  value: value,
+                                                  child: Text(value));
+                                            }).toList(),
+                                            onChanged: (String? value) {
+                                              setState(() {
+                                                value = _requestType;
+                                              });
+                                            },
+                                            decoration: InputDecoration(
+                                                labelText: 'Request Type',
+                                                filled: true,
+                                                fillColor: Colors.grey[200],
+                                                border: OutlineInputBorder(
+                                                  borderRadius:
+                                                      BorderRadius.circular(30),
+                                                  borderSide: const BorderSide(
+                                                      color: Colors.purple),
+                                                ),
+                                                contentPadding:
+                                                    const EdgeInsets.symmetric(
+                                                        vertical: 20,
+                                                        horizontal: 20),
+                                               ),
+                                            validator: (value) {
+                                              if (value == null ||
+                                                  value.isEmpty) {
+                                                return 'Please Enter Your request type';
+                                              }
+                                              return null;
+                                            },
+                                          ),
+            ),
+                                        
+         const SizedBox(height: 9,),
+     Column(
+       children: [
+          const Text(
+            'Select Truck Type',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold
+            ),
+          ),
+         Padding(
+           padding: const EdgeInsets.symmetric(horizontal: 60, vertical: 4),
+            child:  SizedBox(
+             height: 200,
+              child: GridView.builder(
+               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                 crossAxisCount: 2,
+                 mainAxisSpacing: 7,
+                 crossAxisSpacing: 7,
+                 childAspectRatio: 1.0),
+              itemCount: customerController.availableTruckTypes.length,
+              itemBuilder:(context,index) {
+                final availableTruckTypeData= customerController.availableTruckTypes[index];
+                 return ElevatedButton(
+                   onPressed:(){
+                     setState(() {
+                       customerController.setSelectedTruckTypeData(availableTruckTypeData.truckTypeID, availableTruckTypeData.typeName);
+                      
+                     });
+                   },
+                   style: ElevatedButton.styleFrom(
+                      backgroundColor: customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.purple :Colors.white,
+                      foregroundColor:customerController.selectedTruckTypeId==availableTruckTypeData.truckTypeID ? Colors.white : Colors.purple,
+                     shape: RoundedRectangleBorder(
+                       borderRadius: BorderRadius.circular(30)
+                     )
+                   ),
+                    child:Column(
+                      
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                              Image.asset(
+                               customerController.availableTruckTypes[index].sampleImageUrl,
+                               height: 90,
+                               width: 90,
+                              ),
+                              Text(
+                              customerController.availableTruckTypes[index].typeName,
+                               style: const TextStyle(
+                                 fontSize: 15,
+                                 fontWeight: FontWeight.bold
+                               ),
+                              )
+                                  ],
+                    )
+                   );
+              }),
+            ),
+             ),
+       ],
+     ),
+   ],
+ );
 
 
         }

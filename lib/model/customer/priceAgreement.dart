@@ -17,15 +17,17 @@ class PriceAgreement {
     required this.agreedPrice,
   });
 
+ 
   factory PriceAgreement.fromJson(Map<String, dynamic> json) {
-    return PriceAgreement(
-      priceAgreementID: json['priceAgreementID'],
-      companyID: json['companyID'],
-      jobRequestID: json['jobRequestID'],
-      customerID: json['customerID'],
-      companyPrice: json['companyPrice'].toDouble(),
-      customerPrice: json['customerPrice'].toDouble(),
-      agreedPrice: json['agreedPrice'].toDouble(),
-    );
-  }
+  return PriceAgreement(
+    priceAgreementID: json['priceAgreementID'] ?? '',
+    companyID: json['companyID'],
+    jobRequestID: json['jobRequestID'] ?? '',
+    customerID: json['customerID'],
+    companyPrice: json['companyPrice']?.toDouble() ?? 0.0,
+    customerPrice: json['customerPrice']?.toDouble() ?? 0.0,
+    agreedPrice: json['agreedPrice']?.toDouble() ?? 0.0,
+  );
+}
+
 }

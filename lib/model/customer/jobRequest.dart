@@ -9,7 +9,7 @@ class Negotiation {
   final String customerID;
   final double companyPrice;
   final double customerPrice;
-  final double agreedPrice;
+   double agreedPrice;
 
   Negotiation({
     required this.priceAgreementID,
@@ -23,17 +23,16 @@ class Negotiation {
 
   factory Negotiation.fromJson(Map<String, dynamic> json) {
     return Negotiation(
-      priceAgreementID: json['priceAgreementID'],
-      companyID: json['companyID'],
-      jobRequestID: json['jobRequestID'],
-      customerID: json['customerID'],
-      companyPrice: json['companyPrice']?.toDouble() ?? 0.0,
-      customerPrice: json['customerPrice']?.toDouble() ?? 0.0,
-      agreedPrice: json['agreedPrice']?.toDouble() ?? 0.0,
+      priceAgreementID: json['priceAgreementID']?.toString() ?? '',
+      companyID: json['companyID']?.toString(), // Allow null
+      jobRequestID: json['jobRequestID']?.toString() ?? '',
+      customerID: json['customerID']?.toString() ?? '',
+      companyPrice: (json['companyPrice'] ?? 0).toDouble(),
+      customerPrice: (json['customerPrice'] ?? 0).toDouble(),
+      agreedPrice: (json['agreedPrice'] ?? 0).toDouble(),
     );
   }
 }
-
 class ActiveRequest {
   final String jobRequestID;
   final String? assignedCompany;
@@ -44,7 +43,7 @@ class ActiveRequest {
   final String requestType;
   final String status;
   final String priceAgreementID;
-  final PriceAgreement priceAgreement;
+  final PriceAgreement? priceAgreement;
   final List<Negotiation> negotiations;
   final String truckType;
   final String? truckID;
@@ -58,7 +57,7 @@ class ActiveRequest {
   final String? driverID;
   final dynamic driver;
   final String customerID;
-  final Customer customer;
+  final Customer? customer;
   final dynamic invoiceDetails;
 
   ActiveRequest({
@@ -71,7 +70,7 @@ class ActiveRequest {
     required this.requestType,
     required this.status,
     required this.priceAgreementID,
-    required this.priceAgreement,
+    this.priceAgreement,
     required this.negotiations,
     required this.truckType,
     this.truckID,
@@ -85,39 +84,41 @@ class ActiveRequest {
     this.driverID,
     this.driver,
     required this.customerID,
-    required this.customer,
+    this.customer,
     this.invoiceDetails,
   });
 
   factory ActiveRequest.fromJson(Map<String, dynamic> json) {
     return ActiveRequest(
-      jobRequestID: json['jobRequestID'],
-      assignedCompany: json['assignedCompany'],
-      pickupLocation: json['pickupLocation'],
-      deliveryLocation: json['deliveryLocation'],
-      cargoDescription: json['cargoDescription'],
-      containerNumber: json['containerNumber'],
-      requestType: json['requestType'],
-      status: json['status'],
-      priceAgreementID: json['priceAgreementID'],
-      priceAgreement: PriceAgreement.fromJson(json['priceAgreement']),
-      negotiations: (json['negotiations'] as List<dynamic>)
-          .map((e) => Negotiation.fromJson(e as Map<String, dynamic>))
-          .toList(),
-      truckType: json['truckType'],
-      truckID: json['truckID'],
-      cdate: DateTime.parse(json['cdate']),
-      udate: json['udate'] != null ? DateTime.parse(json['udate']) : null,
-      firstDepositAmount: json['firstDepositAmount']?.toDouble(),
-      companyAdvanceAmountRequred:
-          json['companyAdvanceAmountRequred']?.toDouble(),
-      contractId: json['contractId'],
-      invoiceNumber: json['invoiceNumber'],
+      jobRequestID: json['jobRequestID']?.toString() ?? '',
+      assignedCompany: json['assignedCompany']?.toString(),
+      pickupLocation: json['pickupLocation']?.toString() ?? '',
+      deliveryLocation: json['deliveryLocation']?.toString() ?? '',
+      cargoDescription: json['cargoDescription']?.toString() ?? '',
+      containerNumber: json['containerNumber']?.toString(),
+      requestType: json['requestType']?.toString() ?? '',
+      status: json['status']?.toString() ?? '',
+      priceAgreementID: json['priceAgreementID']?.toString() ?? '',
+      priceAgreement: json['priceAgreement'] != null
+          ? PriceAgreement.fromJson(json['priceAgreement'])
+          : null,
+      negotiations: (json['negotiations'] as List<dynamic>?)
+              ?.map((e) => Negotiation.fromJson(e as Map<String, dynamic>))
+              .toList() ??
+          [],
+      truckType: json['truckType']?.toString() ?? '',
+      truckID: json['truckID']?.toString(),
+      cdate: DateTime.tryParse(json['cdate']?.toString() ?? '') ?? DateTime.now(),
+      udate: json['udate'] != null ? DateTime.tryParse(json['udate'].toString()) : null,
+      firstDepositAmount: (json['firstDepositAmount'] ?? 0).toDouble(),
+      companyAdvanceAmountRequred: (json['companyAdvanceAmountRequred'] ?? 0).toDouble(),
+      contractId: json['contractId']?.toString(),
+      invoiceNumber: json['invoiceNumber']?.toString(),
       truck: json['truck'],
-      driverID: json['driverID'],
+      driverID: json['driverID']?.toString(),
       driver: json['driver'],
-      customerID: json['customerID'],
-      customer: Customer.fromJson(json['customer']),
+      customerID: json['customerID']?.toString() ?? '',
+      customer: json['customer'] != null ? Customer.fromJson(json['customer']) : null,
       invoiceDetails: json['invoiceDetails'],
     );
   }
